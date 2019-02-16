@@ -1,4 +1,5 @@
-.vs
+.vs/**
+.vscode/**
 central_controller.sln
 central_controller.vcxproj
 central_controller.vcxproj.filters
