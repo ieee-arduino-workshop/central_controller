@@ -1,6 +1,7 @@
 // Develop branch - test code
 #include <iostream>
 #include <Windows.h>	// For utilising the sleep function - Windows
+#include <string>       // For utilising Strings
 
 using namespace std;
 
@@ -16,6 +17,8 @@ int ball_user_y = 0;
 // Soccer field dimension variables - These values will change in the future
 int pitch_x = 1500;
 int pitch_y = 1000;
+// Flags for detecting ball position with respect to the pitch
+int ball_position_on_pitch;
 
 
 //  ------Global functions------
@@ -27,12 +30,17 @@ void ball_function(int x, int y) {
     cout << "   Y = " << ball_position_y_previous << endl;  //Debugging purposes only
 
     // Checking if the ball is at the boundaries of the pitch
-    if (x > pitch_x || x == pitch_x) {      // Checking if the ball has exceed the x-axis boundaries
-        ball_position_x_now = pitch_x;      // Preventing the ball from exceeding the boundaries by keeping the ball at the boundary
-    } if (y > pitch_y || y == pitch_y) {    // Checking if the ball has exceed the x-axis boundaries
-        ball_position_y_now = pitch_y;      // Preventing the ball from exceeding the boundaries by keeping the ball at the boundary
-    } else {                                // If the ball doesn't exceed the boundaries of the pitch
+    if (x >= pitch_x) {                 // Checking if the ball has gone beyond the x-axis boundaries
+        ball_position_x_now = pitch_x;
+    } if (x <= 0) {                     // Checking if the ball has gone beyond the x-axis boundaries
+        ball_position_x_now = 0;
+    } if (y >= pitch_y) {               // Checking if the ball has gone beyond the y-axis boundaries
+        ball_position_y_now = pitch_y;
+    } if (y <= 0) {                     // Checking if the ball has gone beyond the y-axis boundaries
+        ball_position_y_now = 0;
+    } if (x < pitch_x && x > 0) {       // If the ball doesn't exceed the x-axis boundaries of the pitch
         ball_position_x_now = x;
+    } if (y < pitch_y && y > 0) {       // If the ball doesn't exceed the y-axis boundaries of the pitch
         ball_position_y_now = y;
     }
     
