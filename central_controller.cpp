@@ -5,21 +5,27 @@
 using namespace std;
 
 // ------Global variables------
-// Ball movement vairables
+// Ball position vairables
 int ball_position_x_now = 0;
 int ball_position_y_now = 0;
 int ball_position_x_previous = 0;
 int ball_position_y_previous = 0;
+// Ball movement variables
+int ball_vector_x = 0;
+int ball_vector_y = 0;
 // Ball user input variables
 int ball_user_x = 0;
 int ball_user_y = 0;
 // Soccer field dimension variables - These values will change in the future
-int pitch_x = 1500;
-int pitch_y = 1000;
+int pitch_x_min = 0;
+int pitch_y_min = 0;
+int pitch_x_max = 1500;
+int pitch_y_max = 1000;
 
 
 //  ------Global functions------
-void ball_function(int x, int y) {
+void ball_function(int x, int y)
+{
     // Showing the ball's previous position
     cout << "------Start of ball_function------" << endl;   //Debugging purposes only
     cout << "Position of the ball : Previous" << endl;      //Debugging purposes only
@@ -27,19 +33,23 @@ void ball_function(int x, int y) {
     cout << "   Y = " << ball_position_y_previous << endl;  //Debugging purposes only
 
     // Checking if the ball is at the boundaries of the pitch
-    if (x >= pitch_x) {                 // Checking if the ball has gone beyond the x-axis boundaries
-        ball_position_x_now = pitch_x;
-    } if (x <= 0) {                     // Checking if the ball has gone beyond the x-axis boundaries
-        ball_position_x_now = 0;
-    } if (y >= pitch_y) {               // Checking if the ball has gone beyond the y-axis boundaries
-        ball_position_y_now = pitch_y;
-    } if (y <= 0) {                     // Checking if the ball has gone beyond the y-axis boundaries
-        ball_position_y_now = 0;
-    } if (x < pitch_x && x > 0) {       // If the ball doesn't exceed the x-axis boundaries of the pitch
+    if (x >= pitch_x_max) {                     // Checking if the ball has gone beyond the x-axis boundaries
+        ball_position_x_now = pitch_x_max;
+    } if (x <= pitch_x_min) {                   // Checking if the ball has gone beyond the x-axis boundaries
+        ball_position_x_now = pitch_x_min;
+    } if (y >= pitch_y_max) {                   // Checking if the ball has gone beyond the y-axis boundaries
+        ball_position_y_now = pitch_y_max;
+    } if (y <= pitch_y_min) {                   // Checking if the ball has gone beyond the y-axis boundaries
+        ball_position_y_now = pitch_y_min;
+    } if (x < pitch_x_max && x > pitch_x_min) { // If the ball doesn't exceed the x-axis boundaries of the pitch
         ball_position_x_now = x;
-    } if (y < pitch_y && y > 0) {       // If the ball doesn't exceed the y-axis boundaries of the pitch
+    } if (y < pitch_y_max && y > pitch_y_min) { // If the ball doesn't exceed the y-axis boundaries of the pitch
         ball_position_y_now = y;
     }
+
+    // Calculating the movement vector of the ball
+    ball_vector_x = ball_position_x_now - ball_position_x_previous;
+    ball_vector_y = ball_position_y_now - ball_position_y_previous;
     
     // The ball's previous position
     ball_position_x_previous = ball_position_x_now;
@@ -49,6 +59,10 @@ void ball_function(int x, int y) {
     cout << "Position of the ball : Now" << endl;      //Debugging purposes only
     cout << "   X = " << ball_position_x_now << endl;  //Debugging purposes only
     cout << "   Y = " << ball_position_y_now << endl;  //Debugging purposes only
+    // Showing the ball's current movement vector
+    cout << "Movement vector of the ball:" << endl;     //Debugging purposes only
+    cout << "   Delta X = " << ball_vector_x << endl;   //Debugging purposes only
+    cout << "   Delta Y = " << ball_vector_y << endl;   //Debugging purposes only
 }
 
 int main() {
