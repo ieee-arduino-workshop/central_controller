@@ -1,7 +1,6 @@
 // Develop branch - test code
 #include <iostream>
 #include <Windows.h>	// For utilising the sleep function - Windows
-#include <string>       // For utilising Strings
 
 using namespace std;
 
@@ -17,8 +16,6 @@ int ball_user_y = 0;
 // Soccer field dimension variables - These values will change in the future
 int pitch_x = 1500;
 int pitch_y = 1000;
-// Flags for detecting ball position with respect to the pitch
-int ball_position_on_pitch;
 
 
 //  ------Global functions------
