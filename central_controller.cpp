@@ -4,13 +4,13 @@
 
 using namespace std;
 
-enum eDir {STOP = 0, LEFT, RIGHT, UP, DOWN};	//TODO: start with basic and later maybe add 8 direction
+enum eDir {STOP = 0, LEFT, UPLEFT, DOWNLEFT, RIGHT, UPRIGHT, DOWNRIGHT, UP, DOWN};	//TODO: start with basic and later maybe add 8 direction
 
 class Player {
 private:
 	int x, y;	//position of player
 	int originalX, originalY;	//reset coordinates
-	eDir direction;
+	
 public:
 	Player(int posX, int posY) //constructor that take x and y coordinate
 	{
@@ -18,39 +18,77 @@ public:
 		originalY = posY;
 		x = posX; //set the current position of the player
 		y = posY;
-		direction = STOP;
+		
 	}
 	void Reset() //reset function
 	{
 		x = originalX; y = originalY;
-		direction = STOP;
 	}
-	void changeDirection(eDir d) //function to change direction of the player
-	{
-		direction = d;
-	}
+	
 	inline int getX() { return x; } //public get x and y function (use inline to replace those function definition wherever those are being called)
 	inline int getY() { return y; }
 	inline void moveUp() { y--; }
 	inline void moveDown() { y++; }
 	inline void moveLeft() { x--; }
 	inline void moveRight() { x++; }
-	inline int getDirection() { return direction; } //public get current direction
+	
 };
 
 class Ball {
 private:
 	int x, y;
 	int oriX, oriY;
+	eDir direction;
 public:
 	Ball(int posX, int posY) {
 		oriX = posX;
 		oriY = posY;
 		x = posX;
 		y = posY;
+		direction = STOP;
 	}
 	void Reset() {
 		x = oriX; y = oriY;
+		direction = STOP;
+	}
+	void changeDirection(eDir d) //function to change direction of the ball
+	{
+		direction = d;
+	}
+	void randomDirection() {
+		direction = (eDir)((rand() % 8) + 1); //random number from 1-8
+	}
+	void Move() {
+		switch (direction) {
+		case STOP:
+			break;
+		case LEFT:
+			x--;
+			break;
+		case RIGHT:
+			x++;
+			break;
+		case UPLEFT:
+			x--; y--;
+			break;
+		case UPRIGHT:
+			x++; y--;
+			break;
+		case UP:
+			y--;
+			break;
+		case DOWN:
+			y++;
+			break;
+		case DOWNLEFT:
+			x--; y++;
+			break;
+		case DOWNRIGHT:
+			x++; y++;
+			break;
+		default:
+			break;
+		}
 	}
 	inline int getX() { return x; } //public get x and y function (use inline to replace those function definition wherever those are being called)
 	inline int getY() { return y; }
@@ -60,18 +98,20 @@ public:
 	inline void moveDown() { y++; }
 	inline void moveLeft() { x--; }
 	inline void moveRight() { x++; }
+	inline int getDirection() { return direction; } //public get current direction
 };
 
 class game_manager {
 private:
 	int width, height;
 	char up, down, left, right;
-	bool quit;
+	bool quit, dribble;
 	Player * p1;
 	Ball * b1;
 public:
 	game_manager(int w, int h) {	//constructor
 		quit = false;
+		dribble = true;
 		up = 'w', down = 's', left = 'a', right = 'd';
 		width = w; height = h;
 		p1 = new Player(w / 2, h / 2);	//set player in the middle
@@ -127,6 +167,8 @@ public:
 	}
 
 	void Input() {
+		
+		
 		int playerx = p1->getX();
 		int playery = p1->getY();	//Get location of all objects
 		int ballx = b1->getX();
@@ -136,44 +178,71 @@ public:
 		{
 			if (GetAsyncKeyState(87)) {	//ascii W checking asynchorously for Key state
 				if ((playery > 0) && (bally > 0)) {
-					p1->moveUp(); b1->setY(p1->getY() - 1); b1->setX(p1->getX());	//move player and ball
+					p1->moveUp();  	//move player
+					if (dribble) {	//dribble ball if dribble flag is set
+						b1->setY(p1->getY() - 1); b1->setX(p1->getX());	//set position near the player
+						b1->changeDirection(UP);						//change direction
+					}
 				}
 			}
 			if (GetAsyncKeyState(83)) {	//	S
 				if ((playery < height - 1) && (bally < height - 1)) {
-					p1->moveDown();	b1->setY(p1->getY() + 1); b1->setX(p1->getX());
+					p1->moveDown();	 
+					if (dribble) {
+						b1->setY(p1->getY() + 1); b1->setX(p1->getX());
+						b1->changeDirection(DOWN);
+					}
 				}
 			}
 			if (GetAsyncKeyState(65)) {	//	A
 				if ((playerx > 0) && (ballx > 0)) {
-					p1->moveLeft();	b1->setX(p1->getX() - 1); b1->setY(p1->getY());
+					p1->moveLeft();	
+					if (dribble) {
+						b1->setX(p1->getX() - 1); b1->setY(p1->getY());
+						b1->changeDirection(LEFT);
+					}
 				}
 			}
 			if (GetAsyncKeyState(68)) {	//	D
 				if ((playerx < width - 1) && (ballx < width - 1)) {
-					p1->moveRight(); b1->setX(p1->getX() + 1); b1->setY(p1->getY());
+					p1->moveRight(); 
+					if (dribble) {
+						b1->setX(p1->getX() + 1); b1->setY(p1->getY());
+						b1->changeDirection(RIGHT);
+					}
+					
 				}
 			}
-			if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {	//W&D	sticky ball
-				if ((bally > 0) && (ballx < width - 1)) {
-					b1->setY(p1->getY() - 1); b1->setX(p1->getX() + 1);
+			if (dribble) {
+				if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {	//W&D	sticky ball
+					if ((bally > 0) && (ballx < width - 1)) {
+						b1->setY(p1->getY() - 1); b1->setX(p1->getX() + 1);
+						b1->changeDirection(UPRIGHT);
+					}
+				}
+				else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {	//W&A
+					if ((bally > 0) && (ballx > 0)) {
+						b1->setY(p1->getY() - 1); b1->setX(p1->getX() - 1);
+						b1->changeDirection(UPLEFT);
+					}
+				}
+				else if (GetAsyncKeyState(83) && GetAsyncKeyState(65)) {	//S&A
+					if ((bally < height - 1) && (ballx > 0)) {
+						b1->setY(p1->getY() + 1); b1->setX(p1->getX() - 1);
+						b1->changeDirection(DOWNLEFT);
+					}
+				}
+				else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {	//S&D
+					if ((bally < height - 1) && (ballx < width - 1)) {
+						b1->setY(p1->getY() + 1); b1->setX(p1->getX() + 1);
+						b1->changeDirection(DOWNRIGHT);
+					}
 				}
 			}
-			else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {	//W&A
-				if ((bally > 0) && (ballx > 0)) {
-					b1->setY(p1->getY() - 1); b1->setX(p1->getX() - 1);
-				}
+			if (GetAsyncKeyState(VK_SPACE)) {
+				dribble = false;
 			}
-			else if (GetAsyncKeyState(83) && GetAsyncKeyState(65)) {	//S&A
-				if ((bally < height - 1) && (ballx > 0)) {
-					b1->setY(p1->getY() + 1); b1->setX(p1->getX() - 1);
-				}
-			}
-			else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {	//S&D
-				if ((bally < height - 1) && (ballx < width - 1)) {
-					b1->setY(p1->getY() + 1); b1->setX(p1->getX() + 1);
-				}
-			}
+			
 			if (GetAsyncKeyState(82)) {	// R
 				p1->Reset();
 				b1->Reset();
@@ -185,18 +254,42 @@ public:
 	}
 
 	void Logic() {
+		if (!dribble) {
+			b1->Move(); //if ball is not being dribble by player it moves freely
+		}
 		int playerx = p1->getX();
 		int playery = p1->getY();	//Get location of all objects
-		// nothing need to interact yet
+		int ballx = b1->getX();
+		int bally = b1->getY();
+
+		int d_AB = sqrt(pow((ballx - playerx), 2) + pow((bally - playery), 2));
+		//catching the ball when it touches the player
+		if (d_AB == 1) {
+			dribble = true;
+		}
+
+		//bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
+		if (bally == height - 1)
+			b1->changeDirection(b1->getDirection() == DOWNRIGHT ? UPRIGHT : UPLEFT);
+		//top wall hit
+		if (bally == 0)
+			b1->changeDirection(b1->getDirection() == UPRIGHT ? DOWNRIGHT : DOWNLEFT);
+		//right wall hit
+		if (ballx == width - 1)
+			b1->changeDirection(b1->getDirection() == UPRIGHT ? UPLEFT : DOWNLEFT);
+		//left wall hit
+		if (ballx == 0)
+			b1->changeDirection(b1->getDirection() == DOWNLEFT ? DOWNRIGHT : UPRIGHT);
+
 	}
 
 	void Run()	//run the game 
 	{
 		while (!quit)	//while q button is not pressed
-		{
+		{			
 			Draw();		//draw the board
 			Input();	//record input from player
-			//Logic();	//check logic each frame (not needed atm)
+			Logic();	//check logic each frame (not needed atm)
 		}
 	}
 };
