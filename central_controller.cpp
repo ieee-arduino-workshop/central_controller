@@ -4,25 +4,25 @@
 
 using namespace std;
 
-enum eDir {STOP = 0, LEFT, UPLEFT, DOWNLEFT, RIGHT, UPRIGHT, DOWNRIGHT, UP, DOWN};	//TODO: start with basic and later maybe add 8 direction
+enum eDir {STOP = 0, LEFT, UPLEFT, DOWNLEFT, RIGHT, UPRIGHT, DOWNRIGHT, UP, DOWN};	// 8 direction
 
 class Player {
 private:
 	int x, y;	//position of player
-	int originalX, originalY;	//reset coordinates
+	int original_x, original_y;	//reset coordinates
 	
 public:
-	Player(int posX, int posY) //constructor that take x and y coordinate
+	Player(int pos_x, int pos_y) //constructor that take x and y coordinate
 	{
-		originalX = posX; //used to reset the player later
-		originalY = posY;
-		x = posX; //set the current position of the player
-		y = posY;
+		original_x = pos_x; //used to reset the player later
+		original_y = pos_y;
+		x = pos_x; //set the current position of the player
+		y = pos_y;
 		
 	}
 	void Reset() //reset function
 	{
-		x = originalX; y = originalY;
+		x = original_x; y = original_y;
 	}
 	
 	inline int getX() { return x; } //public get x and y function (use inline to replace those function definition wherever those are being called)
@@ -37,18 +37,18 @@ public:
 class Ball {
 private:
 	int x, y;
-	int oriX, oriY;
+	int ori_x, ori_y;
 	eDir direction;
 public:
-	Ball(int posX, int posY) {
-		oriX = posX;
-		oriY = posY;
-		x = posX;
-		y = posY;
+	Ball(int pos_x, int pos_y) {
+		ori_x = pos_x;
+		ori_y = pos_y;
+		x = pos_x;
+		y = pos_y;
 		direction = STOP;
 	}
 	void Reset() {
-		x = oriX; y = oriY;
+		x = ori_x; y = ori_y;
 		direction = STOP;
 	}
 	void changeDirection(eDir d) //function to change direction of the ball
@@ -143,25 +143,27 @@ public:
 				int ballx = b1->getX();
 				int bally = b1->getY();		//Get local of ball
 
-				if (j == 0)	//draw the wall part at the start of every row
+				if (j == 0) {	//draw the wall part at the start of every row
 					cout << "\xB2";	//hex character code
-
+				}
 				//Draw player location
-				if (playerx == j && playery == i)
+				if (playerx == j && playery == i) {
 					cout << "\xFE"; //player
-				else if (ballx == j && bally == i)
+				}
+				else if (ballx == j && bally == i) {
 					cout << "O"; //ball
-				
-				else
-					cout << " ";
+				}
+				else { cout << " "; }
 
-				if (j == width - 1)	//draw the wall part at the end of every row
+				if (j == width - 1) {	//draw the wall part at the end of every row
 					cout << "\xB2";
+				}
 			}
 			cout << endl;
 		}
-		for (int i = 0; i < width + 2; i++)	//draw the bottom wall
+		for (int i = 0; i < width + 2; i++) {	//draw the bottom wall
 			cout << "\xB2";
+		}
 		cout << endl;
 		
 	}
@@ -180,8 +182,8 @@ public:
 				if ((playery > 0) && (bally > 0)) {
 					p1->moveUp();  	//move player
 					if (dribble) {	//dribble ball if dribble flag is set
-						b1->setY(p1->getY() - 1); b1->setX(p1->getX());	//set position near the player
-						b1->changeDirection(UP);						//change direction
+						b1->setY(p1->getY() - 1); b1->setX(p1->getX());	//set ball position near the player
+						b1->changeDirection(UP);						//change current direction of the ball
 					}
 				}
 			}
@@ -262,24 +264,75 @@ public:
 		int ballx = b1->getX();
 		int bally = b1->getY();
 
-		int d_AB = sqrt(pow((ballx - playerx), 2) + pow((bally - playery), 2));
+		int d_AB = sqrt(pow((ballx - playerx), 2) + pow((bally - playery), 2));// calculate the distance between the ball and player
 		//catching the ball when it touches the player
 		if (d_AB == 1) {
 			dribble = true;
 		}
-
 		//bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
-		if (bally == height - 1)
-			b1->changeDirection(b1->getDirection() == DOWNRIGHT ? UPRIGHT : UPLEFT);
+		if (bally == height - 1) {
+			switch (b1->getDirection()) {
+			case DOWN:
+				b1->changeDirection(UP);
+				break;
+			case DOWNRIGHT:
+				b1->changeDirection(UPRIGHT);
+				break;
+			case DOWNLEFT:
+				b1->changeDirection(UPLEFT);
+				break;
+			default:
+				break;
+			}
+		}
 		//top wall hit
-		if (bally == 0)
-			b1->changeDirection(b1->getDirection() == UPRIGHT ? DOWNRIGHT : DOWNLEFT);
+		if (bally == 0) {
+			switch (b1->getDirection()) {
+			case UP:
+				b1->changeDirection(DOWN);
+				break;
+			case UPRIGHT:
+				b1->changeDirection(DOWNRIGHT);
+				break;
+			case UPLEFT:
+				b1->changeDirection(DOWNLEFT);
+				break;
+			default:
+				break;
+			}
+		}
 		//right wall hit
-		if (ballx == width - 1)
-			b1->changeDirection(b1->getDirection() == UPRIGHT ? UPLEFT : DOWNLEFT);
+		if (ballx == width - 1) {
+			switch (b1->getDirection()) {
+			case RIGHT:
+				b1->changeDirection(LEFT);
+				break;
+			case UPRIGHT:
+				b1->changeDirection(UPLEFT);
+				break;
+			case DOWNRIGHT:
+				b1->changeDirection(DOWNLEFT);
+				break;
+			default:
+				break;
+			}
+		}
 		//left wall hit
-		if (ballx == 0)
-			b1->changeDirection(b1->getDirection() == DOWNLEFT ? DOWNRIGHT : UPRIGHT);
+		if (ballx == 0) {
+			switch (b1->getDirection()) {
+			case LEFT:
+				b1->changeDirection(RIGHT);
+				break;
+			case UPLEFT:
+				b1->changeDirection(UPRIGHT);
+				break;
+			case DOWNLEFT:
+				b1->changeDirection(DOWNRIGHT);
+				break;
+			default:
+				break;
+			}
+		}
 
 	}
 
