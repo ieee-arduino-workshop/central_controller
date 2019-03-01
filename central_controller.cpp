@@ -12,16 +12,15 @@ private:
 	int original_x, original_y;	//reset coordinates
 	
 public:
-	Player(int pos_x, int pos_y) //constructor that take x and y coordinate
-	{
+	Player(int pos_x, int pos_y){ //constructor that take x and y coordinate
+	
 		original_x = pos_x; //used to reset the player later
 		original_y = pos_y;
 		x = pos_x; //set the current position of the player
 		y = pos_y;
 		
 	}
-	void Reset() //reset function
-	{
+	void Reset(){ //reset function
 		x = original_x; y = original_y;
 	}
 	
@@ -51,8 +50,7 @@ public:
 		x = ori_x; y = ori_y;
 		direction = STOP;
 	}
-	void changeDirection(eDir d) //function to change direction of the ball
-	{
+	void changeDirection(eDir d){ //function to change direction of the ball
 		direction = d;
 	}
 	void randomDirection() {
@@ -118,8 +116,7 @@ public:
 		b1 = new Ball(w / 2 + 1, h / 2);
 	}
 
-	~game_manager()
-	{
+	~game_manager(){
 		delete p1;
 	}
 
@@ -130,27 +127,27 @@ public:
 	void Draw() {	//for debug purposes
 
 		system("cls");
-		for (int i = 0; i < width + 2; i++)	//draw the top wall for the game
+		for (int i = 0; i < width + 2; i++) {	//draw the top wall for the game
 			cout << "\xB2";
+		}
 		cout << endl;
 
-		for (int i = 0; i < height; i++)	//2 side wall and all the ojects inbetween. COLUMN
-		{
-			for (int j = 0; j < width; j++)	// ROW
-			{
-				int playerx = p1->getX();
-				int playery = p1->getY();	//Get location of all objects (player)
-				int ballx = b1->getX();
-				int bally = b1->getY();		//Get local of ball
+		for (int i = 0; i < height; i++){	//2 side wall and all the ojects inbetween. COLUMN
+		
+			for (int j = 0; j < width; j++){	// ROW
+				int player_x = p1->getX();
+				int player_y = p1->getY();	//Get location of all objects (player)
+				int ball_x = b1->getX();
+				int ball_y = b1->getY();		//Get local of ball
 
 				if (j == 0) {	//draw the wall part at the start of every row
 					cout << "\xB2";	//hex character code
 				}
 				//Draw player location
-				if (playerx == j && playery == i) {
+				if (player_x == j && player_y == i) {
 					cout << "\xFE"; //player
 				}
-				else if (ballx == j && bally == i) {
+				else if (ball_x == j && ball_y == i) {
 					cout << "O"; //ball
 				}
 				else { cout << " "; }
@@ -171,15 +168,15 @@ public:
 	void Input() {
 		
 		
-		int playerx = p1->getX();
-		int playery = p1->getY();	//Get location of all objects
-		int ballx = b1->getX();
-		int bally = b1->getY();
+		int player_x = p1->getX();
+		int player_y = p1->getY();	//Get location of all objects
+		int ball_x = b1->getX();
+		int ball_y = b1->getY();
 
 		if (_kbhit())	//get user input
 		{
 			if (GetAsyncKeyState(87)) {	//ascii W checking asynchorously for Key state
-				if ((playery > 0) && (bally > 0)) {
+				if ((player_y > 0) && (ball_y > 0)) {
 					p1->moveUp();  	//move player
 					if (dribble) {	//dribble ball if dribble flag is set
 						b1->setY(p1->getY() - 1); b1->setX(p1->getX());	//set ball position near the player
@@ -188,7 +185,7 @@ public:
 				}
 			}
 			if (GetAsyncKeyState(83)) {	//	S
-				if ((playery < height - 1) && (bally < height - 1)) {
+				if ((player_y < height - 1) && (ball_y < height - 1)) {
 					p1->moveDown();	 
 					if (dribble) {
 						b1->setY(p1->getY() + 1); b1->setX(p1->getX());
@@ -197,7 +194,7 @@ public:
 				}
 			}
 			if (GetAsyncKeyState(65)) {	//	A
-				if ((playerx > 0) && (ballx > 0)) {
+				if ((player_x > 0) && (ball_x > 0)) {
 					p1->moveLeft();	
 					if (dribble) {
 						b1->setX(p1->getX() - 1); b1->setY(p1->getY());
@@ -206,36 +203,35 @@ public:
 				}
 			}
 			if (GetAsyncKeyState(68)) {	//	D
-				if ((playerx < width - 1) && (ballx < width - 1)) {
+				if ((player_x < width - 1) && (ball_x < width - 1)) {
 					p1->moveRight(); 
 					if (dribble) {
 						b1->setX(p1->getX() + 1); b1->setY(p1->getY());
 						b1->changeDirection(RIGHT);
 					}
-					
 				}
 			}
 			if (dribble) {
 				if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {	//W&D	sticky ball
-					if ((bally > 0) && (ballx < width - 1)) {
+					if ((ball_y > 0) && (ball_x < width - 1)) {
 						b1->setY(p1->getY() - 1); b1->setX(p1->getX() + 1);
 						b1->changeDirection(UPRIGHT);
 					}
 				}
 				else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {	//W&A
-					if ((bally > 0) && (ballx > 0)) {
+					if ((ball_y > 0) && (ball_x > 0)) {
 						b1->setY(p1->getY() - 1); b1->setX(p1->getX() - 1);
 						b1->changeDirection(UPLEFT);
 					}
 				}
 				else if (GetAsyncKeyState(83) && GetAsyncKeyState(65)) {	//S&A
-					if ((bally < height - 1) && (ballx > 0)) {
+					if ((ball_y < height - 1) && (ball_x > 0)) {
 						b1->setY(p1->getY() + 1); b1->setX(p1->getX() - 1);
 						b1->changeDirection(DOWNLEFT);
 					}
 				}
 				else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {	//S&D
-					if ((bally < height - 1) && (ballx < width - 1)) {
+					if ((ball_y < height - 1) && (ball_x < width - 1)) {
 						b1->setY(p1->getY() + 1); b1->setX(p1->getX() + 1);
 						b1->changeDirection(DOWNRIGHT);
 					}
@@ -244,14 +240,13 @@ public:
 			if (GetAsyncKeyState(VK_SPACE)) {
 				dribble = false;
 			}
-			
 			if (GetAsyncKeyState(82)) {	// R
 				p1->Reset();
 				b1->Reset();
 			}
-			if (GetAsyncKeyState(81))	//ascii Q quit the game with q
+			if (GetAsyncKeyState(81)) {	//ascii Q quit the game with q
 				quit = true;
-			
+			}
 		}
 	}
 
@@ -259,18 +254,18 @@ public:
 		if (!dribble) {
 			b1->Move(); //if ball is not being dribble by player it moves freely
 		}
-		int playerx = p1->getX();
-		int playery = p1->getY();	//Get location of all objects
-		int ballx = b1->getX();
-		int bally = b1->getY();
+		int player_x = p1->getX();
+		int player_y = p1->getY();	//Get location of all objects
+		int ball_x = b1->getX();
+		int ball_y = b1->getY();
 
-		int d_AB = sqrt(pow((ballx - playerx), 2) + pow((bally - playery), 2));// calculate the distance between the ball and player
+		int d_AB = sqrt(pow((ball_x - player_x), 2) + pow((ball_y - player_y), 2));// calculate the distance between the ball and player
 		//catching the ball when it touches the player
 		if (d_AB == 1) {
 			dribble = true;
 		}
 		//bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
-		if (bally == height - 1) {
+		if (ball_y == height - 1) {
 			switch (b1->getDirection()) {
 			case DOWN:
 				b1->changeDirection(UP);
@@ -286,7 +281,7 @@ public:
 			}
 		}
 		//top wall hit
-		if (bally == 0) {
+		if (ball_y == 0) {
 			switch (b1->getDirection()) {
 			case UP:
 				b1->changeDirection(DOWN);
@@ -302,7 +297,7 @@ public:
 			}
 		}
 		//right wall hit
-		if (ballx == width - 1) {
+		if (ball_x == width - 1) {
 			switch (b1->getDirection()) {
 			case RIGHT:
 				b1->changeDirection(LEFT);
@@ -318,7 +313,7 @@ public:
 			}
 		}
 		//left wall hit
-		if (ballx == 0) {
+		if (ball_x == 0) {
 			switch (b1->getDirection()) {
 			case LEFT:
 				b1->changeDirection(RIGHT);
@@ -336,10 +331,10 @@ public:
 
 	}
 
-	void Run()	//run the game 
-	{
-		while (!quit)	//while q button is not pressed
-		{			
+	void Run(){	//run the game 
+	
+		while (!quit){	//while q button is not pressed
+					
 			Draw();		//draw the board
 			Input();	//record input from player
 			Logic();	//check logic each frame (not needed atm)
