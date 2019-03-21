@@ -16,7 +16,7 @@ public:
 	
 		original_x = pos_x; //used to reset the player later
 		original_y = pos_y;
-		x = pos_x; //set the current position of the player
+		x = pos_x; 			//set the current position of the player
 		y = pos_y;
 		
 	}
