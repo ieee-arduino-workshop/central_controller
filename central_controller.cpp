@@ -1,4 +1,5 @@
 #include <iostream>
+<<<<<<< HEAD
 #include <conio.h>
 #include <Windows.h>
 
