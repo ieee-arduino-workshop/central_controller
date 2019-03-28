@@ -17,7 +17,8 @@
 
 using namespace std;
 
-enum eDir {STOP = 0, LEFT, UPLEFT, DOWNLEFT, RIGHT, UPRIGHT, DOWNRIGHT, UP, DOWN};    // 8 direction
+// Variable for the 8 directions
+enum eDir {STOP = 0, LEFT, UPLEFT, DOWNLEFT, RIGHT, UPRIGHT, DOWNRIGHT, UP, DOWN};
 
 /****************************************************************************************************
 *****************************************************************************************************
@@ -27,8 +28,11 @@ enum eDir {STOP = 0, LEFT, UPLEFT, DOWNLEFT, RIGHT, UPRIGHT, DOWNRIGHT, UP, DOWN
 ****************************************************************************************************/
 class Player {
     private:
-        int x, y;                       //position of player
-        int original_x, original_y;     //reset coordinates
+        //Position of player
+        int x, y;
+
+        // Reset co-ordinates
+        int original_x, original_y;
     
     public:
         /****************************************************************************************************
@@ -37,10 +41,13 @@ class Player {
         ** Description: Player class constructor and setting player location history variables
         *****************************************************************************************************
         ****************************************************************************************************/
-        Player(int pos_x, int pos_y) {  //constructor that take x and y coordinate
-            original_x = pos_x;         //used to reset the player later
+        Player(int pos_x, int pos_y) {
+            // Used to reset the player later
+            original_x = pos_x;
             original_y = pos_y;
-            x = pos_x;                  //set the current position of the player
+            
+            // Set the current position of the player
+            x = pos_x;
             y = pos_y;
         }
 
@@ -50,11 +57,12 @@ class Player {
         ** Description: Player's location on the field will be reset using the following function
         *****************************************************************************************************
         ****************************************************************************************************/
-        void Reset() { //reset function
+        void Reset() {
             x = original_x; y = original_y;
         }
         
-        inline int getX() { return x; } //public get x and y function (use inline to replace those function definition wherever those are being called)
+        // Public - Get x and y function (use inline to replace those function definition wherever those are being called)
+        inline int getX() { return x; }
         inline int getY() { return y; }
         inline void moveUp() { y--; }
         inline void moveDown() { y++; }
@@ -155,7 +163,8 @@ class Ball {
             }
         }
 
-        inline int getX() { return x; }                 //public get x and y function (use inline to replace those function definition wherever those are being called)
+        //Public - Get x and y functions (use inline to replace those function definition wherever those are being called)
+        inline int getX() { return x; }
         inline int getY() { return y; }
         inline void setX(int newX) { x = newX; }
         inline void setY(int newY) { y = newY; }
@@ -163,7 +172,9 @@ class Ball {
         inline void moveDown() { y++; }
         inline void moveLeft() { x--; }
         inline void moveRight() { x++; }
-        inline int getDirection() { return direction; } //public get current direction
+
+        //Public - Get current direction
+        inline int getDirection() { return direction; }
 };
 
 /****************************************************************************************************
@@ -186,12 +197,16 @@ class game_manager {
         ** Description: Game manager class constructor and setting initial variables for game mechanics
         *****************************************************************************************************
         ****************************************************************************************************/
-        game_manager(int w, int h) { //constructor
+        game_manager(int w, int h) {
             quit = false;
             dribble = true;
             up = 'w', down = 's', left = 'a', right = 'd';
+            
+            // Width 0 -> +X & Height 0 -> -Y
             width = w; height = h;
-            p1 = new Player(w / 2, h / 2); //set player in the middle
+
+            // Set player in the middle
+            p1 = new Player(w / 2, h / 2);
             b1 = new Ball(w / 2 + 1, h / 2);
     }
 
@@ -221,39 +236,55 @@ class game_manager {
     ** Description: The following function will draw the field, ball and player within the command line insterface for debugging purposes only
     *****************************************************************************************************
     ****************************************************************************************************/
-    void Draw() { //for debug purposes
+    void Draw() {
+        // Clear the terminal output
         system("cls");
-        for (int i = 0; i < width + 2; i++) {   //draw the top wall for the game
+        
+        // Draw the top wall for the game
+        for (int i = 0; i < width + 2; i++) {
             cout << "\xB2";
         }
         cout << endl;
 
-        for (int i = 0; i < height; i++){       //2 side wall and all the ojects inbetween. COLUMN
-            for (int j = 0; j < width; j++){    // ROW
-                int player_x = p1->getX();
-                int player_y = p1->getY();      //Get location of all objects (player)
-                int ball_x = b1->getX();
-                int ball_y = b1->getY();        //Get local of ball
+        // Draw columns - Draw the 2 side wall and all the ojebcts inbetween
+        for (int i = 0; i < height; i++){
 
-                if (j == 0) {                   //draw the wall part at the start of every row
-                    cout << "\xB2";             //hex character code
+            // Draw rows
+            for (int j = 0; j < width; j++){
+                // Get the location of all objects
+                int player_x = p1->getX();
+                int player_y = p1->getY();
+                int ball_x = b1->getX();
+                int ball_y = b1->getY();
+
+                // Draw the wall part at the start of every row - Using HEX character codes
+                if (j == 0) {
+                    cout << "\xB2";
                 }
+                
                 //Draw player location
                 if (player_x == j && player_y == i) {
-                    cout << "\xFE";     //player
+                    cout << "\xFE";
                 }
+
+                // Draw the ball
                 else if (ball_x == j && ball_y == i) {
-                    cout << "O";        //ball
+                    cout << "O";
                 }
+
+                // Draw empty sapace
                 else { cout << " "; }
 
-                if (j == width - 1) {   //draw the wall part at the end of every row
+               // Draw the wall part at the end of every row
+                if (j == width - 1) {
                     cout << "\xB2";
                 }
             }
             cout << endl;
         }
-        for (int i = 0; i < width + 2; i++) {   //draw the bottom wall
+
+        // Draw the bottom wall
+        for (int i = 0; i < width + 2; i++) {
             cout << "\xB2";
         }
         cout << endl;
@@ -266,22 +297,36 @@ class game_manager {
     *****************************************************************************************************
     ****************************************************************************************************/
     void Input() {
+        // Get location of all objects
         int player_x = p1->getX();
-        int player_y = p1->getY();              //Get location of all objects
+        int player_y = p1->getY();
         int ball_x = b1->getX();
         int ball_y = b1->getY();
 
-        if (_kbhit()) { //get user input
-            if (GetAsyncKeyState(87)) {         //ascii W checking asynchorously for Key state
+        // Get user input - Asynchronous ASCII key press check
+        if (_kbhit()) {
+
+            // W - Key press
+            if (GetAsyncKeyState(87)) {
                 if ((player_y > 0) && (ball_y > 0)) {
-                    p1->moveUp();               //move player
-                    if (dribble) {              //dribble ball if dribble flag is set
-                        b1->setY(p1->getY() - 1); b1->setX(p1->getX()); //set ball position near the player
-                        b1->changeDirection(UP);                        //change current direction of the ball
+
+                    // Move player
+                    p1->moveUp();
+
+                    // Dribble ball if dribble flag is set
+                    if (dribble) {
+
+                        // Set ball position near the player
+                        b1->setY(p1->getY() - 1); b1->setX(p1->getX());
+                        
+                        // Change current direction of the ball
+                        b1->changeDirection(UP);
                     }
                 }
             }
-            if (GetAsyncKeyState(83)) {    //    S
+
+            // S - Key press
+            if (GetAsyncKeyState(83)) {
                 if ((player_y < height - 1) && (ball_y < height - 1)) {
                     p1->moveDown();     
                     if (dribble) {
@@ -290,7 +335,9 @@ class game_manager {
                     }
                 }
             }
-            if (GetAsyncKeyState(65)) {    //    A
+
+            // A - Key press
+            if (GetAsyncKeyState(65)) {
                 if ((player_x > 0) && (ball_x > 0)) {
                     p1->moveLeft();    
                     if (dribble) {
@@ -299,7 +346,9 @@ class game_manager {
                     }
                 }
             }
-            if (GetAsyncKeyState(68)) {    //    D
+
+            // D = Key press
+            if (GetAsyncKeyState(68)) {
                 if ((player_x < width - 1) && (ball_x < width - 1)) {
                     p1->moveRight(); 
                     if (dribble) {
@@ -308,40 +357,56 @@ class game_manager {
                     }
                 }
             }
+
+            // If dribbling has been detected
             if (dribble) {
-                if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {         //W&D    sticky ball
+
+                // W&D - Key press
+                if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {
                     if ((ball_y > 0) && (ball_x < width - 1)) {
                         b1->setY(p1->getY() - 1); b1->setX(p1->getX() + 1);
                         b1->changeDirection(UPRIGHT);
                     }
                 }
-                else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {    //W&A
+
+                // W&A - Key press
+                else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {
                     if ((ball_y > 0) && (ball_x > 0)) {
                         b1->setY(p1->getY() - 1); b1->setX(p1->getX() - 1);
                         b1->changeDirection(UPLEFT);
                     }
                 }
-                else if (GetAsyncKeyState(83) && GetAsyncKeyState(65)) {    //S&A
+
+                // S&A - Key press
+                else if (GetAsyncKeyState(83) && GetAsyncKeyState(65)) {
                     if ((ball_y < height - 1) && (ball_x > 0)) {
                         b1->setY(p1->getY() + 1); b1->setX(p1->getX() - 1);
                         b1->changeDirection(DOWNLEFT);
                     }
                 }
-                else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {    //S&D
+
+                // S&D - Key press
+                else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {
                     if ((ball_y < height - 1) && (ball_x < width - 1)) {
                         b1->setY(p1->getY() + 1); b1->setX(p1->getX() + 1);
                         b1->changeDirection(DOWNRIGHT);
                     }
                 }
             }
+
+            // SPACE - Key press
             if (GetAsyncKeyState(VK_SPACE)) {
                 dribble = false;
             }
-            if (GetAsyncKeyState(82)) {    // R
+
+            // R - Key press
+            if (GetAsyncKeyState(82)) {
                 p1->Reset();
                 b1->Reset();
             }
-            if (GetAsyncKeyState(81)) {    //ascii Q quit the game with q
+
+            // Q - Key press - quit the game with q
+            if (GetAsyncKeyState(81)) {
                 quit = true;
             }
         }
@@ -354,21 +419,26 @@ class game_manager {
     *****************************************************************************************************
     ****************************************************************************************************/
     void Logic() {
+        // If ball is not being dribble by player it moves freely
         if (!dribble) {
-            b1->Move();                 //if ball is not being dribble by player it moves freely
+            b1->Move();
         }
+
+        // Get location of all objects
         int player_x = p1->getX();
-        int player_y = p1->getY();      //Get location of all objects
+        int player_y = p1->getY();
         int ball_x = b1->getX();
         int ball_y = b1->getY();
 
-        int d_AB = sqrt(pow((ball_x - player_x), 2) + pow((ball_y - player_y), 2));// calculate the distance between the ball and player
+        // Calculate the distance between the ball and player
+        int distance_between_player_and_ball = sqrt(pow((ball_x - player_x), 2) + pow((ball_y - player_y), 2));
 
-        //catching the ball when it touches the player
-        if (d_AB == 1) {
+        // Catching the ball when it touches the player
+        if (distance_between_player_and_ball == 1) {
             dribble = true;
         }
-        //bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
+
+        // Bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
         if (ball_y == height - 1) {
             switch (b1->getDirection()) {
             case DOWN:
@@ -384,7 +454,8 @@ class game_manager {
                 break;
             }
         }
-        //top wall hit
+
+        // Top wall hit
         if (ball_y == 0) {
             switch (b1->getDirection()) {
             case UP:
@@ -400,7 +471,8 @@ class game_manager {
                 break;
             }
         }
-        //right wall hit
+
+        // Right wall hit
         if (ball_x == width - 1) {
             switch (b1->getDirection()) {
             case RIGHT:
@@ -416,7 +488,8 @@ class game_manager {
                 break;
             }
         }
-        //left wall hit
+
+        // Left wall hit
         if (ball_x == 0) {
             switch (b1->getDirection()) {
             case LEFT:
@@ -437,14 +510,20 @@ class game_manager {
     /****************************************************************************************************
     *****************************************************************************************************
     ** Name:        Execute game manager
-    ** Description: The following function will execute all functions within the game manager class
+    ** Description: The following function will execute all functions within the game manager class and will run the game
     *****************************************************************************************************
     ****************************************************************************************************/
-    void Run() {            //run the game 
-            while (!quit){  //while q button is not pressed
-            Draw();         //draw the board
-            Input();        //record input from player
-            Logic();        //check logic each frame (not needed atm)
+    void Run() {
+            // While q (quit) button is not pressed
+            while (!quit){
+                // Draw the board
+                Draw();
+
+                // Record input from player
+                Input();
+
+                // Check logic each frame (not needed atm)
+                Logic();
         }
     }
 };
