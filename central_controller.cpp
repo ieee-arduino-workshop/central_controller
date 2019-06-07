@@ -1,3 +1,9 @@
+// TODO :   BUG -   Figure out why the height border starts at negative -1
+//          BUG -   Figure out why the ball dispears off beyond the boarder when kicked
+//                  into the ball at a diagonal angle.
+//                  The suggestion regarding ball reseting once it has made contact with
+//                  the border is likely to mitigate this issue.
+
 #include <iostream>
 #include <conio.h>
 #include <Windows.h>
@@ -307,12 +313,12 @@ class game_manager {
                         
                         // Check if the ball is besides the adjacent wall
                         // If TRUE - move the player position to prevent ball clipping
-                        if (p1->getY() == 1) {
+                        if (p1->getY() == 0) {
 
-                            // Setting the player 2 units away from the border
-                            p1->setY(0 + 2);
+                            // Setting the player 1 units away from the border
+                            p1->setY(0 + 1);
 
-                            // Setting the ball to be next to the boarder
+                            // Setting the ball to be next to the border
                             b1->setY(p1->getY() - 1); b1->setX(p1->getX());
 
                         } else {
