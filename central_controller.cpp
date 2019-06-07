@@ -55,6 +55,8 @@ class Player {
         inline void moveDown() { y++; }
         inline void moveLeft() { x--; }
         inline void moveRight() { x++; }
+        inline void setX(int newX) { x = newX; }
+        inline void setY(int newY) { y = newY; }
 };
 
 /****************************************************************************************************
@@ -302,12 +304,24 @@ class game_manager {
 
                     // Dribble ball if dribble flag is set
                     if (dribble) {
-
-                        // Set ball position near the player
-                        b1->setY(p1->getY() - 1); b1->setX(p1->getX());
                         
-                        // Change current direction of the ball
-                        b1->changeDirection(UP);
+                        // Check if the ball is besides the adjacent wall
+                        // If TRUE - move the player position to prevent ball clipping
+                        if (p1->getY() == 1) {
+
+                            // Setting the player 2 units away from the border
+                            p1->setY(0 + 2);
+
+                            // Setting the ball to be next to the boarder
+                            b1->setY(p1->getY() - 1); b1->setX(p1->getX());
+
+                        } else {
+                            // Set ball position near the player
+                            b1->setY(p1->getY() - 1); b1->setX(p1->getX());
+                            
+                            // Change current direction of the ball
+                            b1->changeDirection(UP);
+                        }
                     }
                 }
             }
@@ -317,8 +331,13 @@ class game_manager {
                 if ((player_y < height - 1) && (ball_y < height - 1)) {
                     p1->moveDown();     
                     if (dribble) {
-                        b1->setY(p1->getY() + 1); b1->setX(p1->getX());
-                        b1->changeDirection(DOWN);
+                        if (p1->getY() == height - 1) {
+                            p1->setY(height - 2);
+                            b1->setY(p1->getY() + 1); b1->setX(p1->getX());
+                        } else {
+                            b1->setY(p1->getY() + 1); b1->setX(p1->getX());
+                            b1->changeDirection(DOWN);
+                        }
                     }
                 }
             }
@@ -328,8 +347,13 @@ class game_manager {
                 if ((player_x > 0) && (ball_x > 0)) {
                     p1->moveLeft();    
                     if (dribble) {
-                        b1->setX(p1->getX() - 1); b1->setY(p1->getY());
-                        b1->changeDirection(LEFT);
+                        if (p1->getX() == 1) {
+                            p1->setX(0 + 2);
+                            b1->setX(p1->getX() - 1); b1->setY(p1->getY());
+                        } else {
+                            b1->setX(p1->getX() - 1); b1->setY(p1->getY());
+                            b1->changeDirection(LEFT);
+                        }
                     }
                 }
             }
@@ -339,8 +363,13 @@ class game_manager {
                 if ((player_x < width - 1) && (ball_x < width - 1)) {
                     p1->moveRight(); 
                     if (dribble) {
-                        b1->setX(p1->getX() + 1); b1->setY(p1->getY());
-                        b1->changeDirection(RIGHT);
+                        if (p1->getX() == width - 1) {
+                            p1->setX(width - 2);
+                            b1->setX(p1->getX() + 1); b1->setY(p1->getY());
+                        } else {
+                            b1->setX(p1->getX() + 1); b1->setY(p1->getY());
+                            b1->changeDirection(RIGHT);
+                        }
                     }
                 }
             }
