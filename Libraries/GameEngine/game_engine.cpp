@@ -123,7 +123,13 @@ game_manager::game_manager(int w, int h)
     height = h;
 
     // Set player in the middle
-    p1 = new Player(w / 2, h / 2);
+    p1 = new Player(w / 2 + 5, h / 2);
+    p2 = new Player(w / 2 - 5, h / 2);
+    p3 = new Player(w / 2 + 5, h / 2 + 5);
+    p4 = new Player(w / 2 - 5, h / 2 + 5);
+    p5 = new Player(w / 2 + 5, h / 2 - 5);
+    p6 = new Player(w / 2 - 5, h / 2 - 5);
+
     b1 = new Ball(w / 2 + 1, h / 2);
 }
 
@@ -137,7 +143,7 @@ void game_manager::reset()
     p1->Reset();
 }
 
-void game_manager::Draw()
+void game_manager::Draw(packet *player_packet)
 {
     // // Clear the terminal output
     // system("cls");
@@ -157,10 +163,70 @@ void game_manager::Draw()
         for (int j = 0; j < width; j++)
         {
             // Get the location of all objects
-            int player_x = p1->getX();
-            int player_y = p1->getY();
+            // int player_x = p1->getX();
+            // int player_y = p1->getY();
             int ball_x = b1->getX();
             int ball_y = b1->getY();
+
+            int player_x;
+            int player_y;
+            switch (player_packet->player_id)
+            {
+            case 1:
+                player_x = p1->getX();
+                player_y = p1->getY();
+                //Draw player location
+                if (player_x == j && player_y == i)
+                {
+                    Serial.print("1");
+                }
+                break;
+            case 2:
+                player_x = p2->getX();
+                player_y = p2->getY();
+                //Draw player location
+                if (player_x == j && player_y == i)
+                {
+                    Serial.print("2");
+                }
+                break;
+            case 3:
+                player_x = p3->getX();
+                player_y = p3->getY();
+                //Draw player location
+                if (player_x == j && player_y == i)
+                {
+                    Serial.print("3");
+                }
+                break;
+            case 4:
+                player_x = p4->getX();
+                player_y = p4->getY();
+                //Draw player location
+                if (player_x == j && player_y == i)
+                {
+                    Serial.print("4");
+                }
+                break;
+            case 5:
+                player_x = p5->getX();
+                player_y = p5->getY();
+                //Draw player location
+                if (player_x == j && player_y == i)
+                {
+                    Serial.print("5");
+                }
+                break;
+            case 6:
+                player_x = p6->getX();
+                player_y = p6->getY();
+                //Draw player location
+                if (player_x == j && player_y == i)
+                {
+                    Serial.print("6");
+                }
+                break;
+            }
 
             // Draw the wall part at the start of every row - Using HEX character codes
             if (j == 0)
@@ -168,11 +234,11 @@ void game_manager::Draw()
                 Serial.print("|");
             }
 
-            //Draw player location
-            if (player_x == j && player_y == i)
-            {
-                Serial.print("&");
-            }
+            // //Draw player location
+            // if (player_x == j && player_y == i)
+            // {
+            //     Serial.print("1");
+            // }
 
             // Draw the ball
             else if (ball_x == j && ball_y == i)
@@ -203,20 +269,54 @@ void game_manager::Draw()
     Serial.println();
 }
 
-void game_manager::Input(packet *player)
+void game_manager::Input(packet *player_packet) //, uint8_t no_players)
 {
     // Get location of all objects
-    int player_x = p1->getX();
-    int player_y = p1->getY();
+
     int ball_x = b1->getX();
     int ball_y = b1->getY();
+    int player_x;
+    int player_y;
+    switch (player_packet->player_id)
+    {
+    case 1:
+        player_x = p1->getX();
+        player_y = p1->getY();
+        break;
+    case 2:
+        player_x = p2->getX();
+        player_y = p2->getY();
+        break;
+    case 3:
+        player_x = p3->getX();
+        player_y = p3->getY();
+        break;
+    case 4:
+        player_x = p4->getX();
+        player_y = p4->getY();
+        break;
+    case 5:
+        player_x = p5->getX();
+        player_y = p5->getY();
+        break;
+    case 6:
+        player_x = p6->getX();
+        player_y = p6->getY();
+        break;
+    }
+
+    // Control(player_packet,no_players,p1);
+    // Control(player_packet,no_players,p2);
+    // Control(player_packet,no_players,p3);
+    // Control(player_packet,no_players,p4);
+    // Control(player_packet,no_players,p5);
 
     // Get user input - Asynchronous ASCII key press check
     // if (_kbhit()) {
 
     // W - Key press
     // Serial.println(player->packet_data,BIN);
-    if (player->up == 1)
+    if (player_packet->up == 1)
     {
         if ((player_y > 0) && (ball_y > 0))
         {
@@ -255,7 +355,7 @@ void game_manager::Input(packet *player)
 
     // S - Key press
     //if (GetAsyncKeyState(83))
-    if (player->down == 1)
+    if (player_packet->down == 1)
     {
         if ((player_y < height - 1) && (ball_y < height - 1))
         {
@@ -280,7 +380,7 @@ void game_manager::Input(packet *player)
 
     // A - Key press
     // if (GetAsyncKeyState(65))
-    if (player->left == 1)
+    if (player_packet->left == 1)
     {
         if ((player_x > 0) && (ball_x > 0))
         {
@@ -305,7 +405,7 @@ void game_manager::Input(packet *player)
 
     // D = Key press
     // if (GetAsyncKeyState(68))
-    if (player->right == 1)
+    if (player_packet->right == 1)
     {
         if ((player_x < width - 1) && (ball_x < width - 1))
         {
@@ -334,7 +434,7 @@ void game_manager::Input(packet *player)
 
         // W&D - Key press
         // if (GetAsyncKeyState(87) && GetAsyncKeyState(68))
-         if (player->up  && player->right)
+        if (player_packet->up && player_packet->right)
         {
             if ((ball_y > 0) && (ball_x < width - 1))
             {
@@ -346,7 +446,7 @@ void game_manager::Input(packet *player)
 
         // W&A - Key press
         // else if (GetAsyncKeyState(87) && GetAsyncKeyState(65))
-        else if (player->up  && player->left)
+        else if (player_packet->up && player_packet->left)
         {
             if ((ball_y > 0) && (ball_x > 0))
             {
@@ -358,7 +458,7 @@ void game_manager::Input(packet *player)
 
         // S&A - Key press
         // else if (GetAsyncKeyState(83) && GetAsyncKeyState(65))
-        else if (player->down  && player->left)
+        else if (player_packet->down && player_packet->left)
         {
             if ((ball_y < height - 1) && (ball_x > 0))
             {
@@ -370,7 +470,7 @@ void game_manager::Input(packet *player)
 
         // S&D - Key press
         // else if (GetAsyncKeyState(83) && GetAsyncKeyState(68))
-        else if (player->down  && player->right)
+        else if (player_packet->down && player_packet->right)
         {
             if ((ball_y < height - 1) && (ball_x < width - 1))
             {
@@ -381,25 +481,27 @@ void game_manager::Input(packet *player)
         }
     }
 
-    //     // SPACE - Key press
-    //     if (GetAsyncKeyState(VK_SPACE)) {
-    //         dribble = false;
-    //     }
+    // SPACE - Key press
+    // if (GetAsyncKeyState(VK_SPACE))
+    if (player_packet->kick == 1)
+    {
+        dribble = false;
+    }
 
-    //     // R - Key press
-    //     if (GetAsyncKeyState(82)) {
-    //         p1->Reset();
-    //         b1->Reset();
-    //     }
+    // // R - Key press
+    // if (GetAsyncKeyState(82)) {
+    //     p1->Reset();
+    //     b1->Reset();
+    // }
 
-    //     // Q - Key press - quit the game with q
-    //     if (GetAsyncKeyState(81)) {
-    //         quit = true;
-    //     }
+    // // Q - Key press - quit the game with q
+    // if (GetAsyncKeyState(81)) {
+    //     quit = true;
+    // }
     // }
 }
 
-void game_manager::Logic()
+void game_manager::Logic(packet *player_packet)
 {
     // If ball is not being dribble by player it moves freely
     if (!dribble)
@@ -408,10 +510,40 @@ void game_manager::Logic()
     }
 
     // Get location of all objects
-    int player_x = p1->getX();
-    int player_y = p1->getY();
+    // int player_x = p1->getX();
+    // int player_y = p1->getY();
     int ball_x = b1->getX();
     int ball_y = b1->getY();
+
+    int player_x;
+    int player_y;
+    switch (player_packet->player_id)
+    {
+    case 1:
+        player_x = p1->getX();
+        player_y = p1->getY();
+        break;
+    case 2:
+        player_x = p2->getX();
+        player_y = p2->getY();
+        break;
+    case 3:
+        player_x = p3->getX();
+        player_y = p3->getY();
+        break;
+    case 4:
+        player_x = p4->getX();
+        player_y = p4->getY();
+        break;
+    case 5:
+        player_x = p5->getX();
+        player_y = p5->getY();
+        break;
+    case 6:
+        player_x = p6->getX();
+        player_y = p6->getY();
+        break;
+    }
 
     // Calculate the distance between the ball and player
     int distance_between_player_and_ball = sqrt(pow((ball_x - player_x), 2) + pow((ball_y - player_y), 2));

@@ -64,14 +64,14 @@ public:
         ****************************************************************************************************/
     void Reset();
     // Public - Get x and y function (use inline to replace those function definition wherever those are being called)
-    inline int getX();// { return x; }
-    inline int getY();// { return y; }
-    inline void moveUp();// { y--; }
-    inline void moveDown();// { y++; }
-    inline void moveLeft();// { x--; }
-    inline void moveRight();// { x++; }
-    inline void setX(int newX);// { x = newX; }
-    inline void setY(int newY);// { y = newY; }
+    inline int getX();          // { return x; }
+    inline int getY();          // { return y; }
+    inline void moveUp();       // { y--; }
+    inline void moveDown();     // { y++; }
+    inline void moveLeft();     // { x--; }
+    inline void moveRight();    // { x++; }
+    inline void setX(int newX); // { x = newX; }
+    inline void setY(int newY); // { y = newY; }
 };
 
 /****************************************************************************************************
@@ -126,17 +126,17 @@ public:
     void Move();
 
     //Public - Get x and y functions (use inline to replace those function definition wherever those are being called)
-    inline int getX();// { return x; }
-    inline int getY();// { return y; }
-    inline void setX(int newX) ;//{ x = newX; }
-    inline void setY(int newY) ;//{ y = newY; }
-    inline void moveUp();// { y--; }
-    inline void moveDown() ;//{ y++; }
-    inline void moveLeft() ;//{ x--; }
-    inline void moveRight() ;//{ x++; }
+    inline int getX();          // { return x; }
+    inline int getY();          // { return y; }
+    inline void setX(int newX); //{ x = newX; }
+    inline void setY(int newY); //{ y = newY; }
+    inline void moveUp();       // { y--; }
+    inline void moveDown();     //{ y++; }
+    inline void moveLeft();     //{ x--; }
+    inline void moveRight();    //{ x++; }
 
     //Public - Get current direction
-    inline int getDirection();// { return direction; }
+    inline int getDirection(); // { return direction; }
 };
 
 /****************************************************************************************************
@@ -151,7 +151,7 @@ private:
     int width, height;
     char up, down, left, right;
     bool quit, dribble;
-    Player *p1;
+    Player *p1, *p2, *p3, *p4, *p5, *p6;
     Ball *b1;
 
 public:
@@ -183,7 +183,7 @@ public:
     ** Description: The following function will draw the field, ball and player within the command line insterface for debugging purposes only
     *****************************************************************************************************
     ****************************************************************************************************/
-    void Draw();
+    void Draw(packet *player);
 
     /****************************************************************************************************
     *****************************************************************************************************
@@ -191,8 +191,7 @@ public:
     ** Description: The following function will listen to the player's inputs and process it accordingly, currently using keyboard inputs for debugging purposes only
     *****************************************************************************************************
     ****************************************************************************************************/
-    void Input(packet* player);
-
+    void Input(packet *player); //,uint8_t no_players);
 
     /****************************************************************************************************
     *****************************************************************************************************
@@ -200,7 +199,7 @@ public:
     ** Description: The core game logic is found here (E.g. ball bounce, kicking, player position boundary check, ball position boundary check)
     *****************************************************************************************************
     ****************************************************************************************************/
-    void Logic();
+    void Logic(packet *player);
 
     /****************************************************************************************************
     *****************************************************************************************************
@@ -209,6 +208,8 @@ public:
     *****************************************************************************************************
     ****************************************************************************************************/
     void Run();
+
+    //void Control(packet *player, uint8_t no_players);
 };
 
 #endif
