@@ -113,8 +113,16 @@ uint16_t random_data(uint16_t data)
   return data;
 }
 
+
+long previous=0;
 void loop()
 {
+  ///test time to execute program
+  // Serial.println(micros()-previous);
+  // previous=micros();
+
+
+
   byte pipeNum = 0;
   uint16_t gotData = 0; //2-bytes data is save imn this buffer
   //scan incoming RF package, each pipeNum is equavilent a player
