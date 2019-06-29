@@ -16,7 +16,9 @@
 
 #define CE 5   // set chip enable pin
 #define CSN 10 //Set chip select pin.
-#define NO_PLAYER 12
+
+//set limit to 6 as currently the game enginer only support 6 
+#define NO_PLAYER 6
 
 /// create object RF24
 RF24 radio(CE, CSN); // CE, CSN
@@ -28,7 +30,7 @@ const uint64_t address[] = {0x7878787878LL, 0xB3B4B5B6F1LL, 0xB3B4B5B6CDLL, 0xB3
 /// create a standard packet to be received.
 
 // create player for the game
-packet Player_packet;//[NO_PLAYER];
+packet Player_packet; //[NO_PLAYER];
 
 void setup()
 {
@@ -48,10 +50,13 @@ void setup()
   radio.setPALevel(RF24_PA_HIGH);
   //radio.setChannel(108);
   // radio.setPALevel(RF24_PA_MAX);
-  for (int i=0;i<5;i++)
+  for (int i = 0; i < 5; i++)
   {
-  radio.openReadingPipe(0, address[i]);  
+    radio.openReadingPipe(i, address[i]);
   }
+  // radio.openReadingPipe(0, address[0]);
+  // radio.openReadingPipe(1, address[1]);
+  // radio.openReadingPipe(0, address[1]);
   radio.startListening();
 
   randomSeed(analogRead(0));
@@ -116,15 +121,12 @@ uint16_t random_data(uint16_t data)
   return data;
 }
 
-
-long previous=0;
+long previous = 0;
 void loop()
 {
   ///test time to execute program
   // Serial.println(micros()-previous);
   // previous=micros();
-
-
 
   byte pipeNum = 0;
   uint16_t gotData = 0; //2-bytes data is save imn this buffer
@@ -141,8 +143,8 @@ void loop()
     // Player_packet[pipeNum].packet_data = gotData;
     Player_packet.packet_data = gotData;
     // if (prev_value != Player1.packet_data)
-    Serial.print("Player ID ");
-    Serial.println(Player_packet.player_id); //print payload or the number the transmitter guessed
+    // Serial.print("Player ID ");
+    // Serial.println(Player_packet.player_id); //print payload or the number the transmitter guessed
     {
       print_data(Player_packet);
     }
@@ -150,7 +152,9 @@ void loop()
 
     soccer_game.Input(&Player_packet);
     soccer_game.Logic(&Player_packet);
-    soccer_game.Draw(&Player_packet);
+
+    /// enable draw function for debugging purpose
+    // soccer_game.Draw(&Player_packet);
   }
 
   // Serial.println(random(0,15));
