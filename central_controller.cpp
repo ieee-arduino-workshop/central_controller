@@ -81,7 +81,7 @@ class Player {
         inline void setX(int newX) { x = newX; }
         inline void setY(int newY) { y = newY; }
         //Public - Get current direction
-        inline int getDirection() { return direction; }
+        inline eDir getDirection() { return direction; }
 };
 
 /****************************************************************************************************
@@ -199,7 +199,7 @@ class Ball {
 ****************************************************************************************************/
 class game_manager {
     private:
-        int width, height;
+        int width, height, LWALL, UWALL, DWALL, RWALL, d_LWALL, d_UWALL, d_DWALL, d_RWALL;
         char up, down, left, right;
         bool quit, dribble;
         Player * p1;
@@ -216,6 +216,12 @@ class game_manager {
             dribble = true;
             up = 'w', down = 's', left = 'a', right = 'd';
             
+            //set wall parameters
+            LWALL = 0; d_LWALL = 1;
+            RWALL = width - 1; d_RWALL = width - 2;
+            UWALL = 0; d_UWALL = 1;
+            DWALL = height - 1; d_DWALL = height - 2;
+
             // Width 0 -> +X & Height 0 -> -Y
             width = w; height = h;
 
@@ -253,7 +259,8 @@ class game_manager {
     void Draw() {
         // Clear the terminal output
         system("cls");
-        
+        cout << d_DWALL << endl;
+        cout << DWALL << endl;
         cout << "Ball X : " << b1->getX() << " Ball Y : " << b1->getY() << endl;
         cout << "Player X : " << p1->getX() << " Player Y : " << p1->getY() << endl;
         
@@ -320,146 +327,115 @@ class game_manager {
         int ball_x = b1->getX();
         int ball_y = b1->getY();
 
+        DWALL = height - 1;
+
         // Get user input - Asynchronous ASCII key press check
         if (_kbhit()) {
 
-            // WD - Key press
-            if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {
-                if ((player_x < width - 1 && player_y > 0) && (ball_x < width - 1 && ball_y >= 0)) {
-                    if (dribble) {
-                        if ((p1->getY() == 1)) {
-                            p1->moveRight(); 
-                            b1->setX(p1->getX() + 1); b1->setY(p1->getY() - 1);
-                            b1->changeDirection(DOWNRIGHT);
-                        } else {
-                            p1->moveUpRight();
-                            b1->setX(p1->getX() + 1); b1->setY(p1->getY() - 1);
-                            b1->changeDirection(UPRIGHT);
-                        }
-                    } else {
-                        p1->moveUpRight();
-                    }
-                }
+            if(dribble) {
+                d_LWALL = 1;
+                d_UWALL = 1;
+                d_RWALL = width - 2;
+                d_DWALL = height - 2;
             }
-            // WA - KeyPress
-            else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {
-                if ((player_x > 0 && player_y > 0) && (ball_x > 0 && ball_y >= 0)) {
-                    if (dribble) {
-                        if ((p1->getY() == 1)) {
-                            p1->moveLeft(); 
-                            b1->setX(p1->getX() - 1); b1->setY(p1->getY() - 1);
-                            b1->changeDirection(DOWNLEFT);
-                        } else {
-                            p1->moveUpLeft(); 
-                            b1->setX(p1->getX() - 1); b1->setY(p1->getY() - 1);
-                            b1->changeDirection(UPLEFT);
-                        }
-                    } else {
-                        p1->moveUpLeft(); 
-                    }
-                }
+            else{
+                d_LWALL = LWALL;
+                d_UWALL = UWALL;
+                d_RWALL = RWALL;
+                d_DWALL = DWALL;
             }
-            // SD - KeyPress
-            else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {
-                if ((player_x < width - 1 && player_y < height - 1) && (ball_x < width - 1 && ball_y < height - 1)) { //TODO
-                    if (dribble) {
-                        if ((p1->getY() == height - 1)) {
-                            p1->moveRight(); 
-                            b1->setX(p1->getX() + 1); b1->setY(p1->getY() + 1);
-                            b1->changeDirection(UPRIGHT);
-                        } else {
-                            p1->moveDownRight(); 
-                            b1->setX(p1->getX() + 1); b1->setY(p1->getY() + 1);
-                            b1->changeDirection(DOWNRIGHT);
-                        }
-                    } else {
-                        p1->moveDownRight(); 
-                    }
-                }
-            }
-            // W - Key press
-            else if (GetAsyncKeyState(87)) {
-                if ((player_y > 0) && (ball_y > 0)) {
 
-                    // Move player
-                    p1->moveUp();
-
-                    // Dribble ball if dribble flag is set
-                    if (dribble) {
-                        
-                        // Check if the ball is besides the adjacent wall
-                        // If TRUE - move the player position to prevent ball clipping
-                        if (p1->getY() == 0) {
-
-                            // Setting the player 1 units away from the border
-                            p1->setY(0 + 1);
-
-                            // Setting the ball to be next to the border
-                            b1->setY(p1->getY() - 1); b1->setX(p1->getX());
-
-                        } else {
-                            // Set ball position near the player
-                            b1->setY(p1->getY() - 1); b1->setX(p1->getX());
-                            
-                            // Change current direction of the ball
-                            b1->changeDirection(UP);
-                        }
-                    }
-                }
-            }
-            // S - Key press
-            else if (GetAsyncKeyState(83)) {
-                if ((player_y < height - 1) && (ball_y < height - 1)) {
-                    p1->moveDown();     
-                    if (dribble) {
-                        if (p1->getY() == height - 1) {
-                            p1->setY(height - 2);
-                            b1->setY(p1->getY() + 1); b1->setX(p1->getX());
-                        } else {
-                            b1->setY(p1->getY() + 1); b1->setX(p1->getX());
-                            b1->changeDirection(DOWN);
-                        }
-                    }
-                }
-            }
-            // A - Key press
-            else if (GetAsyncKeyState(65)) {
-                if ((player_x >= 0) && (ball_x >= 0)) {
-                    p1->moveLeft();    
-                    if (dribble) {
-                        if (p1->getX() == 0) {
-                            p1->setX(0 + 1);
-                            b1->setX(p1->getX() - 1); b1->setY(p1->getY());
-                        } else {
-                            b1->setX(p1->getX() - 1); b1->setY(p1->getY());
-                            b1->changeDirection(LEFT);
-                        }
-                    }
-                }
-            }
-            // D = Key press
-            else if (GetAsyncKeyState(68)) {
-                if ((player_x < width - 1) && (ball_x < width - 1)) {
-                    p1->moveRight(); 
-                    if (dribble) {
-                        if (p1->getX() == width - 1) {
-                            p1->setX(width - 2);
-                            b1->setX(p1->getX() + 1); b1->setY(p1->getY());
-                        } else {
-                            b1->setX(p1->getX() + 1); b1->setY(p1->getY());
-                            b1->changeDirection(RIGHT);
-                        }
-                    }
-                }
-            }
             
+            if (GetAsyncKeyState(65)) { //A - Keypressed
+                if (player_x > d_LWALL){
+                    p1->moveLeft();
+                }
+                if (player_x > LWALL){
+                    p1->changeDirection(LEFT);
+                }
+            } else if(GetAsyncKeyState(68)){ //D - Keypressed
+                if (player_x < d_RWALL){
+                    p1->moveRight();
+                }
+                if (player_x < RWALL){
+                    p1->changeDirection(RIGHT);
+                }
+            } 
+            
+            if (GetAsyncKeyState(87)){ //W - Key press
+                if (player_y > d_UWALL){
+                    p1->moveUp();
+                }
+                if (player_y > UWALL){
+                    if(p1->getDirection() == LEFT ){
+                        p1->changeDirection(UPLEFT);
+                    } else if (p1->getDirection() == RIGHT ){
+                        p1->changeDirection(UPRIGHT);
+                    } else {
+                        p1->changeDirection(UP);
+                    }
+                }
+            } else if (GetAsyncKeyState(83)){ //S - Keypress
+                if (player_y < d_DWALL){
+                    p1->moveDown();
+                }
+                if (player_y < DWALL){
+                    if(p1->getDirection() == LEFT ){
+                        p1->changeDirection(DOWNLEFT);
+                    } else if (p1->getDirection() == RIGHT ){
+                        p1->changeDirection(DOWNRIGHT);
+                    } else {
+                        p1->changeDirection(DOWN);
+                    }
+                }
+            }
+
+            player_x = p1->getX();
+            player_y = p1->getY();
+            if(dribble){
+                switch(p1->getDirection()){
+                    case LEFT:
+                        b1->setX(player_x - 1);
+                        b1->setY(player_y);
+                        break;
+                    case UP:
+                        b1->setX(player_x);
+                        b1->setY(player_y - 1);
+                        break;
+                    case RIGHT:
+                        b1->setX(player_x + 1);
+                        b1->setY(player_y);
+                        break;
+                    case DOWN:
+                        b1->setX(player_x);
+                        b1->setY(player_y + 1);
+                        break;
+                    case UPLEFT:
+                        b1->setX(player_x - 1);
+                        b1->setY(player_y - 1);
+                        break;
+                    case UPRIGHT:
+                        b1->setX(player_x + 1);
+                        b1->setY(player_y - 1);
+                        break;
+                    case DOWNRIGHT:
+                        b1->setX(player_x + 1);
+                        b1->setY(player_y + 1);
+                        break;
+                    case DOWNLEFT:
+                        b1->setX(player_x - 1);
+                        b1->setY(player_y + 1);
+                        break;
+                }
+                b1->changeDirection(p1->getDirection());
+            }
 
             // SPACE - Key press
             if (GetAsyncKeyState(VK_SPACE)) {
                 //check if kick is valid (ball is within defined space)
-                if (ball_y >= 0 && ball_y < height - 1 && ball_x >= 0 && ball_x < width - 1){
+                // if (ball_y > 0 && ball_y < height - 1 && ball_x > 0 && ball_x < width - 1){
                     dribble = false;
-                }
+                // }
             }
 
             // R - Key press
@@ -482,24 +458,12 @@ class game_manager {
     *****************************************************************************************************
     ****************************************************************************************************/
     void Logic() {
-        // If ball is not being dribble by player it moves freely
-        if (!dribble) {
-            b1->Move();
-        }
 
-        // Get location of all objects
+       // Get location of all objects
         int player_x = p1->getX();
         int player_y = p1->getY();
         int ball_x = b1->getX();
         int ball_y = b1->getY();
-
-        // Calculate the distance between the ball and player
-        int distance_between_player_and_ball = sqrt(pow((ball_x - player_x), 2) + pow((ball_y - player_y), 2));
-
-        // Catching the ball when it touches the player
-        if (distance_between_player_and_ball == 1 || distance_between_player_and_ball == 0) {
-            dribble = true;
-        }
 
         // Bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
         if (ball_y == height - 1) {
@@ -568,6 +532,26 @@ class game_manager {
                 break;
             }
         }
+
+         // If ball is not being dribble by player it moves freely
+        if (!dribble) {
+            b1->Move();
+        }
+
+        // Get location of all objects
+        player_x = p1->getX();
+        player_y = p1->getY();
+        ball_x = b1->getX();
+        ball_y = b1->getY();
+
+        // Calculate the distance between the ball and player
+        int distance_between_player_and_ball = sqrt(pow((ball_x - player_x), 2) + pow((ball_y - player_y), 2));
+
+        // Catching the ball when it touches the player
+        if (distance_between_player_and_ball == 1 || distance_between_player_and_ball == 0) {
+            dribble = true;
+        }
+        
     }
 
     /****************************************************************************************************
@@ -589,6 +573,7 @@ class game_manager {
                 Logic();
         }
     }
+
 };
 
 int main() {
