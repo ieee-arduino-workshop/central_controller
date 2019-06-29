@@ -16,7 +16,7 @@
 
 #define CE 5   // set chip enable pin
 #define CSN 10 //Set chip select pin.
-#define NO_PLAYER 2
+#define NO_PLAYER 12
 
 /// create object RF24
 RF24 radio(CE, CSN); // CE, CSN
@@ -28,27 +28,30 @@ const uint64_t address[] = {0x7878787878LL, 0xB3B4B5B6F1LL, 0xB3B4B5B6CDLL, 0xB3
 /// create a standard packet to be received.
 
 // create player for the game
-packet Player_packet[NO_PLAYER];
+packet Player_packet;//[NO_PLAYER];
 
 void setup()
 {
   // init serial port for debugging
   Serial.begin(115200);
 
-  for (int i = 0; i < NO_PLAYER; i++)
-  {
-    Player_packet[i].packet_data = 0;
-    Serial.println(Player_packet[i].packet_data, BIN);
-  }
+  // for (int i = 0; i < NO_PLAYER; i++)
+  // {
+  //   Player_packet[i].packet_data = 0;
+  //   Serial.println(Player_packet[i].packet_data, BIN);
+  // }
+
+  Player_packet.packet_data = 0;
   // initialize RF24 module
   radio.begin();
   //radio.setPALevel(RF24_PA_MIN);
   radio.setPALevel(RF24_PA_HIGH);
   //radio.setChannel(108);
   // radio.setPALevel(RF24_PA_MAX);
-  radio.openReadingPipe(0, address[0]);
-  radio.openReadingPipe(1, address[1]);
-
+  for (int i=0;i<5;i++)
+  {
+  radio.openReadingPipe(0, address[i]);  
+  }
   radio.startListening();
 
   randomSeed(analogRead(0));
@@ -129,22 +132,25 @@ void loop()
   while (radio.available(&pipeNum))
   {
     radio.read(&gotData, 2); /// read 2-byte of data
-    Serial.print("Received data from transmitter: ");
+    Serial.print("Received data from pipe: ");
     Serial.println(pipeNum + 1); //print which pipe or transmitter this is from
-    Serial.print("They guess number: ");
-    Serial.println(gotData); //print payload or the number the transmitter guessed
+    // Serial.print("They guess number: ");
+    // Serial.println(gotData); //print payload or the number the transmitter guessed
 
     //Serial.println(Player1.packet_data, BIN);
-    Player_packet[pipeNum].packet_data = gotData;
+    // Player_packet[pipeNum].packet_data = gotData;
+    Player_packet.packet_data = gotData;
     // if (prev_value != Player1.packet_data)
+    Serial.print("Player ID ");
+    Serial.println(Player_packet.player_id); //print payload or the number the transmitter guessed
     {
-      print_data(Player_packet[pipeNum]);
+      print_data(Player_packet);
     }
     // prev_value = Player1.packet_data;
 
-    soccer_game.Input(&Player_packet[pipeNum]);
-    soccer_game.Logic(&Player_packet[pipeNum]);
-    soccer_game.Draw(&Player_packet[pipeNum]);
+    soccer_game.Input(&Player_packet);
+    soccer_game.Logic(&Player_packet);
+    soccer_game.Draw(&Player_packet);
   }
 
   // Serial.println(random(0,15));
