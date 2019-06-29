@@ -454,42 +454,6 @@ class game_manager {
             }
             
 
-            // // If dribbling has been detected
-            // if (dribble) {
-
-            //     // W&D - Key press
-            //     if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {
-            //         if ((ball_y > 0) && (ball_x < width - 1)) {
-            //             b1->setY(p1->getY() - 1); b1->setX(p1->getX() + 1);
-            //             b1->changeDirection(UPRIGHT);
-            //         }
-            //     }
-
-            //     // W&A - Key press
-            //     else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {
-            //         if ((ball_y > 0) && (ball_x > 0)) {
-            //             b1->setY(p1->getY() - 1); b1->setX(p1->getX() - 1);
-            //             b1->changeDirection(UPLEFT);
-            //         }
-            //     }
-
-            //     // S&A - Key press
-            //     else if (GetAsyncKeyState(83) && GetAsyncKeyState(65)) {
-            //         if ((ball_y < height - 1) && (ball_x > 0)) {
-            //             b1->setY(p1->getY() + 1); b1->setX(p1->getX() - 1);
-            //             b1->changeDirection(DOWNLEFT);
-            //         }
-            //     }
-
-            //     // S&D - Key press
-            //     else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {
-            //         if ((ball_y < height - 1) && (ball_x < width - 1)) {
-            //             b1->setY(p1->getY() + 1); b1->setX(p1->getX() + 1);
-            //             b1->changeDirection(DOWNRIGHT);
-            //         }
-            //     }
-            // }
-
             // SPACE - Key press
             if (GetAsyncKeyState(VK_SPACE)) {
                 //check if kick is valid (ball is within defined space)
