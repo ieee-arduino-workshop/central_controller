@@ -7,6 +7,7 @@
 #include <iostream>
 #include <conio.h>
 #include <Windows.h>
+#include <cmath>
 
 using namespace std;
 
@@ -26,7 +27,9 @@ class Player {
 
         // Reset co-ordinates
         int original_x, original_y;
-    
+
+        //Direction of the player
+        eDir direction;
     public:
         /****************************************************************************************************
         *****************************************************************************************************
@@ -46,6 +49,16 @@ class Player {
 
         /****************************************************************************************************
         *****************************************************************************************************
+        ** Name:        Direction change
+        ** Description: The player direction is changed using the following function
+        *****************************************************************************************************
+        ****************************************************************************************************/
+        void changeDirection(eDir d) { //function to change direction of the ball
+            direction = d;
+        }
+
+        /****************************************************************************************************
+        *****************************************************************************************************
         ** Name:        Position reset
         ** Description: Player's location on the field will be reset using the following function
         *****************************************************************************************************
@@ -61,8 +74,14 @@ class Player {
         inline void moveDown() { y++; }
         inline void moveLeft() { x--; }
         inline void moveRight() { x++; }
+        inline void moveUpRight() { y--; x++;}
+        inline void moveUpLeft() { y--; x--;}
+        inline void moveDownRight() { y++; x++;}
+        inline void moveDownLeft() { y++; x--;}
         inline void setX(int newX) { x = newX; }
         inline void setY(int newY) { y = newY; }
+        //Public - Get current direction
+        inline int getDirection() { return direction; }
 };
 
 /****************************************************************************************************
@@ -235,11 +254,14 @@ class game_manager {
         // Clear the terminal output
         system("cls");
         
-        // Draw the top wall for the game
+        cout << "Ball X : " << b1->getX() << " Ball Y : " << b1->getY() << endl;
+        cout << "Player X : " << p1->getX() << " Player Y : " << p1->getY() << endl;
+        
+        //Draw the top wall for the game
         for (int i = 0; i < width + 2; i++) {
             cout << "\xB2";
         }
-        cout << endl;
+		cout << endl;
 
         // Draw columns - Draw the 2 side wall and all the ojebcts inbetween
         for (int i = 0; i < height; i++){
@@ -301,8 +323,62 @@ class game_manager {
         // Get user input - Asynchronous ASCII key press check
         if (_kbhit()) {
 
+            // WD - Key press
+            if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {
+                if ((player_x < width - 1 && player_y > 0) && (ball_x < width - 1 && ball_y >= 0)) {
+                    if (dribble) {
+                        if ((p1->getY() == 1)) {
+                            p1->moveRight(); 
+                            b1->setX(p1->getX() + 1); b1->setY(p1->getY() - 1);
+                            b1->changeDirection(DOWNRIGHT);
+                        } else {
+                            p1->moveUpRight();
+                            b1->setX(p1->getX() + 1); b1->setY(p1->getY() - 1);
+                            b1->changeDirection(UPRIGHT);
+                        }
+                    } else {
+                        p1->moveUpRight();
+                    }
+                }
+            }
+            // WA - KeyPress
+            else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {
+                if ((player_x > 0 && player_y > 0) && (ball_x > 0 && ball_y >= 0)) {
+                    if (dribble) {
+                        if ((p1->getY() == 1)) {
+                            p1->moveLeft(); 
+                            b1->setX(p1->getX() - 1); b1->setY(p1->getY() - 1);
+                            b1->changeDirection(DOWNLEFT);
+                        } else {
+                            p1->moveUpLeft(); 
+                            b1->setX(p1->getX() - 1); b1->setY(p1->getY() - 1);
+                            b1->changeDirection(UPLEFT);
+                        }
+                    } else {
+                        p1->moveUpLeft(); 
+                    }
+                }
+            }
+            // SD - KeyPress
+            else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {
+                if ((player_x < width - 1 && player_y < height - 1) && (ball_x < width - 1 && ball_y < height - 1)) { //TODO
+                    if (dribble) {
+                        if ((p1->getY() == height - 1)) {
+                            p1->moveRight(); 
+                            b1->setX(p1->getX() + 1); b1->setY(p1->getY() + 1);
+                            b1->changeDirection(UPRIGHT);
+                        } else {
+                            p1->moveDownRight(); 
+                            b1->setX(p1->getX() + 1); b1->setY(p1->getY() + 1);
+                            b1->changeDirection(DOWNRIGHT);
+                        }
+                    } else {
+                        p1->moveDownRight(); 
+                    }
+                }
+            }
             // W - Key press
-            if (GetAsyncKeyState(87)) {
+            else if (GetAsyncKeyState(87)) {
                 if ((player_y > 0) && (ball_y > 0)) {
 
                     // Move player
@@ -331,9 +407,8 @@ class game_manager {
                     }
                 }
             }
-
             // S - Key press
-            if (GetAsyncKeyState(83)) {
+            else if (GetAsyncKeyState(83)) {
                 if ((player_y < height - 1) && (ball_y < height - 1)) {
                     p1->moveDown();     
                     if (dribble) {
@@ -347,14 +422,13 @@ class game_manager {
                     }
                 }
             }
-
             // A - Key press
-            if (GetAsyncKeyState(65)) {
-                if ((player_x > 0) && (ball_x > 0)) {
+            else if (GetAsyncKeyState(65)) {
+                if ((player_x >= 0) && (ball_x >= 0)) {
                     p1->moveLeft();    
                     if (dribble) {
-                        if (p1->getX() == 1) {
-                            p1->setX(0 + 2);
+                        if (p1->getX() == 0) {
+                            p1->setX(0 + 1);
                             b1->setX(p1->getX() - 1); b1->setY(p1->getY());
                         } else {
                             b1->setX(p1->getX() - 1); b1->setY(p1->getY());
@@ -363,9 +437,8 @@ class game_manager {
                     }
                 }
             }
-
             // D = Key press
-            if (GetAsyncKeyState(68)) {
+            else if (GetAsyncKeyState(68)) {
                 if ((player_x < width - 1) && (ball_x < width - 1)) {
                     p1->moveRight(); 
                     if (dribble) {
@@ -379,46 +452,50 @@ class game_manager {
                     }
                 }
             }
+            
 
-            // If dribbling has been detected
-            if (dribble) {
+            // // If dribbling has been detected
+            // if (dribble) {
 
-                // W&D - Key press
-                if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {
-                    if ((ball_y > 0) && (ball_x < width - 1)) {
-                        b1->setY(p1->getY() - 1); b1->setX(p1->getX() + 1);
-                        b1->changeDirection(UPRIGHT);
-                    }
-                }
+            //     // W&D - Key press
+            //     if (GetAsyncKeyState(87) && GetAsyncKeyState(68)) {
+            //         if ((ball_y > 0) && (ball_x < width - 1)) {
+            //             b1->setY(p1->getY() - 1); b1->setX(p1->getX() + 1);
+            //             b1->changeDirection(UPRIGHT);
+            //         }
+            //     }
 
-                // W&A - Key press
-                else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {
-                    if ((ball_y > 0) && (ball_x > 0)) {
-                        b1->setY(p1->getY() - 1); b1->setX(p1->getX() - 1);
-                        b1->changeDirection(UPLEFT);
-                    }
-                }
+            //     // W&A - Key press
+            //     else if (GetAsyncKeyState(87) && GetAsyncKeyState(65)) {
+            //         if ((ball_y > 0) && (ball_x > 0)) {
+            //             b1->setY(p1->getY() - 1); b1->setX(p1->getX() - 1);
+            //             b1->changeDirection(UPLEFT);
+            //         }
+            //     }
 
-                // S&A - Key press
-                else if (GetAsyncKeyState(83) && GetAsyncKeyState(65)) {
-                    if ((ball_y < height - 1) && (ball_x > 0)) {
-                        b1->setY(p1->getY() + 1); b1->setX(p1->getX() - 1);
-                        b1->changeDirection(DOWNLEFT);
-                    }
-                }
+            //     // S&A - Key press
+            //     else if (GetAsyncKeyState(83) && GetAsyncKeyState(65)) {
+            //         if ((ball_y < height - 1) && (ball_x > 0)) {
+            //             b1->setY(p1->getY() + 1); b1->setX(p1->getX() - 1);
+            //             b1->changeDirection(DOWNLEFT);
+            //         }
+            //     }
 
-                // S&D - Key press
-                else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {
-                    if ((ball_y < height - 1) && (ball_x < width - 1)) {
-                        b1->setY(p1->getY() + 1); b1->setX(p1->getX() + 1);
-                        b1->changeDirection(DOWNRIGHT);
-                    }
-                }
-            }
+            //     // S&D - Key press
+            //     else if (GetAsyncKeyState(83) && GetAsyncKeyState(68)) {
+            //         if ((ball_y < height - 1) && (ball_x < width - 1)) {
+            //             b1->setY(p1->getY() + 1); b1->setX(p1->getX() + 1);
+            //             b1->changeDirection(DOWNRIGHT);
+            //         }
+            //     }
+            // }
 
             // SPACE - Key press
             if (GetAsyncKeyState(VK_SPACE)) {
-                dribble = false;
+                //check if kick is valid (ball is within defined space)
+                if (ball_y >= 0 && ball_y < height - 1 && ball_x >= 0 && ball_x < width - 1){
+                    dribble = false;
+                }
             }
 
             // R - Key press
