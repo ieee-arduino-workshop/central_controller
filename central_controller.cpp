@@ -216,14 +216,14 @@ class game_manager {
             dribble = true;
             up = 'w', down = 's', left = 'a', right = 'd';
             
+            // Width 0 -> +X & Height 0 -> -Y
+            width = w; height = h;
+
             //set wall parameters
             LWALL = 0; d_LWALL = 1;
             RWALL = width - 1; d_RWALL = width - 2;
             UWALL = 0; d_UWALL = 1;
             DWALL = height - 1; d_DWALL = height - 2;
-
-            // Width 0 -> +X & Height 0 -> -Y
-            width = w; height = h;
 
             // Set player in the middle
             p1 = new Player(w / 2, h / 2);
@@ -259,8 +259,8 @@ class game_manager {
     void Draw() {
         // Clear the terminal output
         system("cls");
-        cout << d_DWALL << endl;
-        cout << DWALL << endl;
+        
+        //Display current player and ball position
         cout << "Ball X : " << b1->getX() << " Ball Y : " << b1->getY() << endl;
         cout << "Player X : " << p1->getX() << " Player Y : " << p1->getY() << endl;
         
@@ -327,7 +327,7 @@ class game_manager {
         int ball_x = b1->getX();
         int ball_y = b1->getY();
 
-        DWALL = height - 1;
+        
 
         // Get user input - Asynchronous ASCII key press check
         if (_kbhit()) {
@@ -432,10 +432,7 @@ class game_manager {
 
             // SPACE - Key press
             if (GetAsyncKeyState(VK_SPACE)) {
-                //check if kick is valid (ball is within defined space)
-                // if (ball_y > 0 && ball_y < height - 1 && ball_x > 0 && ball_x < width - 1){
                     dribble = false;
-                // }
             }
 
             // R - Key press
