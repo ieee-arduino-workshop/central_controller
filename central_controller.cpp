@@ -25,6 +25,9 @@ class Player {
         //Position of player
         int x, y;
 
+        //Whether or not a player is dribbling the ball
+        bool dribble;
+
         // Reset co-ordinates
         int original_x, original_y;
 
@@ -39,6 +42,7 @@ class Player {
         ****************************************************************************************************/
         Player(int pos_x, int pos_y) {
             // Used to reset the player later
+            dribble = false;
             original_x = pos_x;
             original_y = pos_y;
             
@@ -55,6 +59,16 @@ class Player {
         ****************************************************************************************************/
         void changeDirection(eDir d) { //function to change direction of the ball
             direction = d;
+        }
+
+        /****************************************************************************************************
+        *****************************************************************************************************
+        ** Name:        setDribble
+        ** Description: The allow the player to dribble or kick the ball
+        *****************************************************************************************************
+        ****************************************************************************************************/
+        void setDribble(bool b) { //function to change direction of the ball
+            dribble = b;
         }
 
         /****************************************************************************************************
@@ -82,6 +96,8 @@ class Player {
         inline void setY(int newY) { y = newY; }
         //Public - Get current direction
         inline eDir getDirection() { return direction; }
+        //Public - Get current player dribble flag
+        inline bool getDribble() { return dribble; }
 };
 
 /****************************************************************************************************
@@ -200,8 +216,7 @@ class Ball {
 class game_manager {
     private:
         int width, height, LWALL, UWALL, DWALL, RWALL, d_LWALL, d_UWALL, d_DWALL, d_RWALL;
-        char up, down, left, right;
-        bool quit, dribble;
+        bool quit;
         Player * p1;
         Ball * b1;
     public:
@@ -213,8 +228,6 @@ class game_manager {
         ****************************************************************************************************/
         game_manager(int w, int h) {
             quit = false;
-            dribble = true;
-            up = 'w', down = 's', left = 'a', right = 'd';
             
             // Width 0 -> +X & Height 0 -> -Y
             width = w; height = h;
@@ -228,6 +241,8 @@ class game_manager {
             // Set player in the middle
             p1 = new Player(w / 2, h / 2);
             b1 = new Ball(w / 2 + 1, h / 2);
+
+            
     }
 
     /****************************************************************************************************
@@ -238,6 +253,7 @@ class game_manager {
     ****************************************************************************************************/
     ~game_manager(){
         delete p1;
+        delete b1;
     }
 
     /****************************************************************************************************
@@ -290,13 +306,11 @@ class game_manager {
                 if (player_x == j && player_y == i) {
                     cout << "\xFE";
                 }
-
                 // Draw the ball
                 else if (ball_x == j && ball_y == i) {
                     cout << "O";
                 }
-
-                // Draw empty sapace
+                // Draw empty space
                 else { cout << " "; }
 
                // Draw the wall part at the end of every row
@@ -324,6 +338,7 @@ class game_manager {
         // Get location of all objects
         int player_x = p1->getX();
         int player_y = p1->getY();
+        int player_dribble = p1->getDribble();
         int ball_x = b1->getX();
         int ball_y = b1->getY();
 
@@ -332,7 +347,8 @@ class game_manager {
         // Get user input - Asynchronous ASCII key press check
         if (_kbhit()) {
 
-            if(dribble) {
+            //if dribble is on, the wall of the player 
+            if(player_dribble) {
                 d_LWALL = 1;
                 d_UWALL = 1;
                 d_RWALL = width - 2;
@@ -347,7 +363,7 @@ class game_manager {
 
             
             if (GetAsyncKeyState(65)) { //A - Keypressed
-                if (player_x > d_LWALL){
+                if (player_x > d_LWALL){    //if player 
                     p1->moveLeft();
                 }
                 if (player_x > LWALL){
@@ -392,7 +408,7 @@ class game_manager {
 
             player_x = p1->getX();
             player_y = p1->getY();
-            if(dribble){
+            if(player_dribble){
                 switch(p1->getDirection()){
                     case LEFT:
                         b1->setX(player_x - 1);
@@ -432,7 +448,7 @@ class game_manager {
 
             // SPACE - Key press
             if (GetAsyncKeyState(VK_SPACE)) {
-                    dribble = false;
+                p1->setDribble(false);
             }
 
             // R - Key press
@@ -459,6 +475,7 @@ class game_manager {
        // Get location of all objects
         int player_x = p1->getX();
         int player_y = p1->getY();
+        bool player_dribble = p1->getDribble();
         int ball_x = b1->getX();
         int ball_y = b1->getY();
 
@@ -531,7 +548,7 @@ class game_manager {
         }
 
          // If ball is not being dribble by player it moves freely
-        if (!dribble) {
+        if (!player_dribble) {
             b1->Move();
         }
 
@@ -546,7 +563,7 @@ class game_manager {
 
         // Catching the ball when it touches the player
         if (distance_between_player_and_ball == 1 || distance_between_player_and_ball == 0) {
-            dribble = true;
+            p1->setDribble(true);
         }
         
     }
