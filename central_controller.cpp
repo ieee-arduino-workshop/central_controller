@@ -1,6 +1,4 @@
-// TODO :  BUG - when player 1 move one next to player 2 when he is dribbling the ball, player 2 will
-//               not be able to kick the ball unless player 1 press the kick button.
-//         Feature - draw player dynamically when adding more players
+// TODO :  Feature - draw player dynamically when adding more players
 
 #include <iostream>
 #include <conio.h>
@@ -56,7 +54,7 @@ class Player {
         ** Description: The player direction is changed using the following function
         *****************************************************************************************************
         ****************************************************************************************************/
-        void changeDirection(eDir d) { //function to change direction of the ball
+        void changeDirection(eDir d) {
             direction = d;
         }
 
@@ -66,7 +64,7 @@ class Player {
         ** Description: The allow the player to dribble or kick the ball
         *****************************************************************************************************
         ****************************************************************************************************/
-        void setDribble(bool b) { //function to change direction of the ball
+        void setDribble(bool b) {
             dribble = b;
         }
 
@@ -593,7 +591,7 @@ class game_manager {
                 dribbling = true;
             }
         }
-        //if ball is not being dribble then ball can move
+        //if ball is not being dribble by players then ball can move
         if (!dribbling){
             b1->Move();
         }
@@ -612,8 +610,14 @@ class game_manager {
             int distance_between_player_and_ball = sqrt(pow((ball_x - player_x[i]), 2) + pow((ball_y - player_y[i]), 2));
             // Catching the ball when it touches the player
             if (distance_between_player_and_ball == 1 || distance_between_player_and_ball == 0) {
+                //set the new player dribbling to true
                 player[i]->setDribble(true);
             }
+            else {
+                //otherwise the player is not dribbling the ball
+                player[i]->setDribble(false);
+            }
+
         }
 
         
