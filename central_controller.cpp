@@ -1,4 +1,20 @@
+<<<<<<< HEAD
 // TODO :  Feature - draw player dynamically when adding more players
+=======
+// TO DO: Bug - After going to the edge of a boundary (whether it be the top, bottom, right or left)
+//              and kicking the ball along the boundary such that the ball does not hit the boundary
+//              which it is parallel to but will hit the boundaries that is it perpendicular to
+//              the player cannot move towards the boundary after the player has kicked the ball
+//              even when the player is not next to the boundary.
+//              E.g. Move to the left boundary, line up such that the player is right next to the
+//                   boundary as well as parallel to the boundary. Kick the ball along the boundary
+//                   such that the ball travels parallel to the left boundary but bounces off the
+//                   the top and bottom boundary. Move the player away from the boundary by pressing
+//                   the "D" key (you can change the vertical position of the player by pressing "W"
+//                   or "S" as well) and attempt to move towards the boundary which the ball is bouncing
+//                   parallel to. Notice that you cannot move in the right direction by pressing "A".
+
+>>>>>>> develop_sach
 
 #include <iostream>
 #include <conio.h>
