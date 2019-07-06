@@ -13,114 +13,6 @@ using namespace std;
 
 /****************************************************************************************************
 *****************************************************************************************************
-** Name:        Ball Class
-** Description: Ball's properties (E.g. movement properties)
-*****************************************************************************************************
-****************************************************************************************************/
-class Ball {
-    private:
-        int x, y;
-        int ori_x, ori_y;
-        eDir direction;
-
-    public:
-        /****************************************************************************************************
-        *****************************************************************************************************
-        ** Name:        Ball constructor
-        ** Description: Ball class constructor and setting ball location history variables
-        *****************************************************************************************************
-        ****************************************************************************************************/
-        Ball(int pos_x, int pos_y) {
-            ori_x = pos_x;
-            ori_y = pos_y;
-            x = pos_x;
-            y = pos_y;
-            direction = STOP;
-        }
-
-        /****************************************************************************************************
-        *****************************************************************************************************
-        ** Name:        Position reset
-        ** Description: The ball's location on the field will be reset using the following function
-        *****************************************************************************************************
-        ****************************************************************************************************/
-        void Reset() {
-            x = ori_x; y = ori_y;
-            direction = STOP;
-        }
-        /****************************************************************************************************
-        *****************************************************************************************************
-        ** Name:        Direction change
-        ** Description: The ball's location is changed using the following function
-        *****************************************************************************************************
-        ****************************************************************************************************/
-        void changeDirection(eDir d) { //function to change direction of the ball
-            direction = d;
-        }
-        /****************************************************************************************************
-        *****************************************************************************************************
-        ** Name:        Random direction change
-        ** Description: The ball's direction will be changed randomly
-        *****************************************************************************************************
-        ****************************************************************************************************/
-        void randomDirection() {
-            direction = (eDir)((rand() % 8) + 1); //random number from 1-8
-        }
-        /****************************************************************************************************
-        *****************************************************************************************************
-        ** Name:        Ball direction change mechanics
-        ** Description: The ball's direction change mechanics are handled by the following function
-        *****************************************************************************************************
-        ****************************************************************************************************/
-        void Move() {
-            switch (direction) {
-            case STOP:
-                break;
-            case LEFT:
-                x--;
-                break;
-            case RIGHT:
-                x++;
-                break;
-            case UPLEFT:
-                x--; y--;
-                break;
-            case UPRIGHT:
-                x++; y--;
-                break;
-            case UP:
-                y--;
-                break;
-            case DOWN:
-                y++;
-                break;
-            case DOWNLEFT:
-                x--; y++;
-                break;
-            case DOWNRIGHT:
-                x++; y++;
-                break;
-            default:
-                break;
-            }
-        }
-
-        //Public - Get x and y functions (use inline to replace those function definition wherever those are being called)
-        inline int getX() { return x; }
-        inline int getY() { return y; }
-        inline void setX(int newX) { x = newX; }
-        inline void setY(int newY) { y = newY; }
-        inline void moveUp() { y--; }
-        inline void moveDown() { y++; }
-        inline void moveLeft() { x--; }
-        inline void moveRight() { x++; }
-
-        //Public - Get current direction
-        inline int getDirection() { return direction; }
-};
-
-/****************************************************************************************************
-*****************************************************************************************************
 ** Name:        Game manager class
 ** Description: Game mechanics (E.g. size of field, player movement restrictions, ball movement restrictions, ball bounch mechanics)
 *****************************************************************************************************
@@ -400,7 +292,7 @@ class game_manager {
                             b1->setY(player_y[i] + 1);
                             break;
                     }
-                    b1->changeDirection(player[i]->getDirection());
+                    b1->setDirection(player[i]->getDirection());
                 }
 
                 // kick - Key press
@@ -445,13 +337,13 @@ class game_manager {
         if (ball_y == height - 1) {
             switch (b1->getDirection()) {
             case DOWN:
-                b1->changeDirection(UP);
+                b1->setDirection(UP);
                 break;
             case DOWNRIGHT:
-                b1->changeDirection(UPRIGHT);
+                b1->setDirection(UPRIGHT);
                 break;
             case DOWNLEFT:
-                b1->changeDirection(UPLEFT);
+                b1->setDirection(UPLEFT);
                 break;
             default:
                 break;
@@ -462,13 +354,13 @@ class game_manager {
         if (ball_y == 0) {
             switch (b1->getDirection()) {
             case UP:
-                b1->changeDirection(DOWN);
+                b1->setDirection(DOWN);
                 break;
             case UPRIGHT:
-                b1->changeDirection(DOWNRIGHT);
+                b1->setDirection(DOWNRIGHT);
                 break;
             case UPLEFT:
-                b1->changeDirection(DOWNLEFT);
+                b1->setDirection(DOWNLEFT);
                 break;
             default:
                 break;
@@ -479,13 +371,13 @@ class game_manager {
         if (ball_x == width - 1) {
             switch (b1->getDirection()) {
             case RIGHT:
-                b1->changeDirection(LEFT);
+                b1->setDirection(LEFT);
                 break;
             case UPRIGHT:
-                b1->changeDirection(UPLEFT);
+                b1->setDirection(UPLEFT);
                 break;
             case DOWNRIGHT:
-                b1->changeDirection(DOWNLEFT);
+                b1->setDirection(DOWNLEFT);
                 break;
             default:
                 break;
@@ -496,13 +388,13 @@ class game_manager {
         if (ball_x == 0) {
             switch (b1->getDirection()) {
             case LEFT:
-                b1->changeDirection(RIGHT);
+                b1->setDirection(RIGHT);
                 break;
             case UPLEFT:
-                b1->changeDirection(UPRIGHT);
+                b1->setDirection(UPRIGHT);
                 break;
             case DOWNLEFT:
-                b1->changeDirection(DOWNRIGHT);
+                b1->setDirection(DOWNRIGHT);
                 break;
             default:
                 break;
