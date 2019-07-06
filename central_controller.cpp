@@ -5,99 +5,11 @@
 #include <Windows.h>
 #include <cmath>
 #include <vector>
-#include "packet.h"
+#include "controller_packet.h"
+#include "direction.h"
+#include "Player.h"
 
 using namespace std;
-
-// Variable for the 8 directions
-enum eDir {STOP = 0, LEFT, UPLEFT, DOWNLEFT, RIGHT, UPRIGHT, DOWNRIGHT, UP, DOWN};
-
-/****************************************************************************************************
-*****************************************************************************************************
-** Name:        Player Class
-** Description: Player's properties (E.g. movement abilities)
-*****************************************************************************************************
-****************************************************************************************************/
-class Player {
-    private:
-        // Position of player
-        int x, y;
-
-        // Whether or not a player is dribbling the ball
-        bool dribble;
-
-        // Reset co-ordinates
-        int original_x, original_y;
-
-        // Direction of the player
-        eDir direction;
-        
-    public:
-        /****************************************************************************************************
-        *****************************************************************************************************
-        ** Name:        Player constructor
-        ** Description: Player class constructor and setting player location history variables
-        *****************************************************************************************************
-        ****************************************************************************************************/
-        Player(int pos_x, int pos_y) {
-            // Used to reset the player later
-            dribble = false;
-            original_x = pos_x;
-            original_y = pos_y;
-            
-            // Set the current position of the player
-            x = pos_x;
-            y = pos_y;
-        }
-
-        /****************************************************************************************************
-        *****************************************************************************************************
-        ** Name:        Direction change
-        ** Description: The player direction is changed using the following function
-        *****************************************************************************************************
-        ****************************************************************************************************/
-        void changeDirection(eDir d) {
-            direction = d;
-        }
-
-        /****************************************************************************************************
-        *****************************************************************************************************
-        ** Name:        setDribble
-        ** Description: The allow the player to dribble or kick the ball
-        *****************************************************************************************************
-        ****************************************************************************************************/
-        void setDribble(bool b) {
-            dribble = b;
-        }
-
-        /****************************************************************************************************
-        *****************************************************************************************************
-        ** Name:        Position reset
-        ** Description: Player's location on the field will be reset using the following function
-        *****************************************************************************************************
-        ****************************************************************************************************/
-        void Reset() {
-            x = original_x; y = original_y;
-        }
-        
-        // Public - Get x and y function (use inline to replace those function definition wherever those are being called)
-        inline int getX() { return x; }
-        inline int getY() { return y; }
-        inline void moveUp() { y--; }
-        inline void moveDown() { y++; }
-        inline void moveLeft() { x--; }
-        inline void moveRight() { x++; }
-        inline void moveUpRight() { y--; x++;}
-        inline void moveUpLeft() { y--; x--;}
-        inline void moveDownRight() { y++; x++;}
-        inline void moveDownLeft() { y++; x--;}
-        inline void setX(int newX) { x = newX; }
-        inline void setY(int newY) { y = newY; }
-        //Public - Get current direction
-        inline eDir getDirection() { return direction; }
-        //Public - Get current player dribble flag
-        inline bool getDribble() { return dribble; }
-};
 
 /****************************************************************************************************
 *****************************************************************************************************
@@ -277,8 +189,8 @@ class game_manager {
     ****************************************************************************************************/
     void reset() {
         for (int i = 0; i < num_players; i++){
-            player[i]->Reset();
-            player[i]->setDribble(false);
+            player[i]->reset();
+            player[i]->setDribbling(false);
         }
         b1->Reset();
     }
@@ -382,7 +294,7 @@ class game_manager {
         for (int i = 0; i < num_players; i++){
             player_x[i] = player[i]->getX();
             player_y[i] = player[i]->getY();
-            player_dribble[i] = player[i]->getDribble();
+            player_dribble[i] = player[i]->isDribbling();
         }
 
         int ball_x = b1->getX();
@@ -493,7 +405,7 @@ class game_manager {
 
                 // kick - Key press
                 if (GetAsyncKeyState(32-(i*19))) {
-                    player[i]->setDribble(false);
+                    player[i]->setDribbling(false);
                 }
             }
 
@@ -524,7 +436,7 @@ class game_manager {
         for (int i = 0; i < num_players; i++){
             player_x[i] = player[i]->getX();
             player_y[i] = player[i]->getY();
-            player_dribble[i] = player[i]->getDribble();
+            player_dribble[i] = player[i]->isDribbling();
         }
         int ball_x = b1->getX();
         int ball_y = b1->getY();
@@ -614,7 +526,7 @@ class game_manager {
         for (int i = 0; i < num_players; i++){
             player_x[i] = player[i]->getX();
             player_y[i] = player[i]->getY();
-            player_dribble[i] = player[i]->getDribble();
+            player_dribble[i] = player[i]->isDribbling();
         }
         ball_x = b1->getX();
         ball_y = b1->getY();
@@ -625,11 +537,11 @@ class game_manager {
             // Catching the ball when it touches the player
             if (distance_between_player_and_ball == 1 || distance_between_player_and_ball == 0) {
                 //set the new player dribbling to true
-                player[i]->setDribble(true);
+                player[i]->setDribbling(true);
             }
             else {
                 //otherwise the player is not dribbling the ball
-                player[i]->setDribble(false);
+                player[i]->setDribbling(false);
             }
         }
     }
