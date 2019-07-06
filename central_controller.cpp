@@ -324,14 +324,14 @@ class game_manager {
                         player[i]->moveLeft();
                     }
                     if (player_x[i] > left_wall){
-                        player[i]->changeDirection(LEFT);
+                        player[i]->setDirection(LEFT);
                     }
                 } else if(GetAsyncKeyState(68+(i*8))){ //D - Keypressed
                     if (player_x[i] < dribbling_right_wall){
                         player[i]->moveRight();
                     }
                     if (player_x[i] < right_wall){
-                        player[i]->changeDirection(RIGHT);
+                        player[i]->setDirection(RIGHT);
                     }
                 } 
                 
@@ -341,11 +341,11 @@ class game_manager {
                     }
                     if (player_y[i] > top_wall){
                         if(player[i]->getDirection() == LEFT ){
-                            player[i]->changeDirection(UPLEFT);
+                            player[i]->setDirection(UPLEFT);
                         } else if (player[i]->getDirection() == RIGHT ){
-                            player[i]->changeDirection(UPRIGHT);
+                            player[i]->setDirection(UPRIGHT);
                         } else {
-                            player[i]->changeDirection(UP);
+                            player[i]->setDirection(UP);
                         }
                     }
                 } else if (GetAsyncKeyState(83-(i*8))){ //S - Keypress
@@ -354,11 +354,11 @@ class game_manager {
                     }
                     if (player_y[i] < bottom_wall){
                         if(player[i]->getDirection() == LEFT ){
-                            player[i]->changeDirection(DOWNLEFT);
+                            player[i]->setDirection(DOWNLEFT);
                         } else if (player[i]->getDirection() == RIGHT ){
-                            player[i]->changeDirection(DOWNRIGHT);
+                            player[i]->setDirection(DOWNRIGHT);
                         } else {
-                            player[i]->changeDirection(DOWN);
+                            player[i]->setDirection(DOWN);
                         }
                     }
                 }
