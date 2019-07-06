@@ -140,5 +140,5 @@ void Ball::setDirection(eDir d) {
  * Set the ball's direction randomly.
  */
 void Ball::randomDirection() {
-    direction = rand() % 8 + 1;
+    direction = (eDir) (rand() % 8 + 1);
 }

@@ -1,5 +1,7 @@
 #ifndef BALL_H
 #define BALL_H
+#include <cstdlib>
+#include "direction.h"
 
 class Ball {
     private:
