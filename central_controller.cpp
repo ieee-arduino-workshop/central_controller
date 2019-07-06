@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <cmath>
 #include <vector>
+#include "packet.h"
 
 using namespace std;
 
@@ -19,16 +20,16 @@ enum eDir {STOP = 0, LEFT, UPLEFT, DOWNLEFT, RIGHT, UPRIGHT, DOWNRIGHT, UP, DOWN
 ****************************************************************************************************/
 class Player {
     private:
-        //Position of player
+        // Position of player
         int x, y;
 
-        //Whether or not a player is dribbling the ball
+        // Whether or not a player is dribbling the ball
         bool dribble;
 
         // Reset co-ordinates
         int original_x, original_y;
 
-        //Direction of the player
+        // Direction of the player
         eDir direction;
         
     public:
