@@ -30,6 +30,7 @@ class Player {
 
         //Direction of the player
         eDir direction;
+        
     public:
         /****************************************************************************************************
         *****************************************************************************************************
@@ -108,6 +109,7 @@ class Ball {
         int x, y;
         int ori_x, ori_y;
         eDir direction;
+
     public:
         /****************************************************************************************************
         *****************************************************************************************************
@@ -212,10 +214,11 @@ class Ball {
 ****************************************************************************************************/
 class game_manager {
     private:
-        int num_players, width, height, LWALL, UWALL, DWALL, RWALL, d_LWALL, d_UWALL, d_DWALL, d_RWALL;
+        int num_players, width, height, left_wall, top_wall, bottom_wall, right_wall, dribbling_left_wall, dribbling_top_wall, dribbling_bottom_wall, dribbling_right_wall;
         bool quit;
         vector<Player*>  player;
         Ball * b1;
+
     public:
         /****************************************************************************************************
         *****************************************************************************************************
@@ -230,11 +233,11 @@ class game_manager {
             // Width 0 -> +X & Height 0 -> -Y
             width = w; height = h;
 
-            //set wall parameters
-            LWALL = 0; d_LWALL = 1;
-            RWALL = width - 1; d_RWALL = width - 2;
-            UWALL = 0; d_UWALL = 1;
-            DWALL = height - 1; d_DWALL = height - 2;
+            // Set wall parameters
+            left_wall = 0;              dribbling_left_wall = 1;
+            right_wall = width - 1;     dribbling_right_wall = width - 2;
+            top_wall = 0;               dribbling_top_wall = 1;
+            bottom_wall = height - 1;   dribbling_bottom_wall = height - 2;
             
             // Set player in the middle
             for (int i = 0; i < num_players ; i++){
@@ -245,12 +248,10 @@ class game_manager {
                 else{           //if i is odd (right side)
                     player.push_back(new Player(3*width/4, height * (i+1)/(num_players+2)));
                 }
-                
             }
 
             b1 = new Ball(w / 2, h / 2);
 
-            
     }
 
     /****************************************************************************************************
@@ -311,6 +312,7 @@ class game_manager {
                 // Get the location of all objects
                 int player_x[num_players];
                 int player_y[num_players];
+                
                 for (int i = 0; i < num_players; i++){
                     player_x[i] = player[i]->getX();
                     player_y[i] = player[i]->getY();
@@ -328,6 +330,18 @@ class game_manager {
                     cout << "\xFE";
                 }
                 else if (player_x[1] == j && player_y[1] == i) {
+                    cout << "\xFE";
+                }
+                else if (player_x[2] ==j && player_y[2] == i) {
+                    cout << "\xFE";
+                }
+                else if (player_x[3] == j && player_y[3] == i) {
+                    cout << "\xFE";
+                }
+                else if (player_x[4] ==j && player_y[4] == i) {
+                    cout << "\xFE";
+                }
+                else if (player_x[5] == j && player_y[5] == i) {
                     cout << "\xFE";
                 }
                 // Draw the ball
@@ -363,57 +377,56 @@ class game_manager {
         int player_x[num_players];
         int player_y[num_players];
         int player_dribble[num_players];
+
         for (int i = 0; i < num_players; i++){
             player_x[i] = player[i]->getX();
             player_y[i] = player[i]->getY();
             player_dribble[i] = player[i]->getDribble();
         }
+
         int ball_x = b1->getX();
         int ball_y = b1->getY();
 
-        
-
         // Get user input - Asynchronous ASCII key press check
         if (_kbhit()) {
-            
 
             for (int i = 0; i < num_players; i++){
 
                 //if dribble is on, the wall of the player 
                 if(player_dribble[i]) {
-                    d_LWALL = 1;
-                    d_UWALL = 1;
-                    d_RWALL = width - 2;
-                    d_DWALL = height - 2;
+                    dribbling_left_wall = 1;
+                    dribbling_top_wall = 1;
+                    dribbling_right_wall = width - 2;
+                    dribbling_bottom_wall = height - 2;
                 }
                 else{
-                    d_LWALL = LWALL;
-                    d_UWALL = UWALL;
-                    d_RWALL = RWALL;
-                    d_DWALL = DWALL;
+                    dribbling_left_wall = left_wall;
+                    dribbling_top_wall = top_wall;
+                    dribbling_right_wall = right_wall;
+                    dribbling_bottom_wall = bottom_wall;
                 }
 
                 if (GetAsyncKeyState(65+(i*9))) { //A - Keypressed
-                    if (player_x[i] > d_LWALL){    //if player 
+                    if (player_x[i] > dribbling_left_wall){    //if player 
                         player[i]->moveLeft();
                     }
-                    if (player_x[i] > LWALL){
+                    if (player_x[i] > left_wall){
                         player[i]->changeDirection(LEFT);
                     }
                 } else if(GetAsyncKeyState(68+(i*8))){ //D - Keypressed
-                    if (player_x[i] < d_RWALL){
+                    if (player_x[i] < dribbling_right_wall){
                         player[i]->moveRight();
                     }
-                    if (player_x[i] < RWALL){
+                    if (player_x[i] < right_wall){
                         player[i]->changeDirection(RIGHT);
                     }
                 } 
                 
                 if (GetAsyncKeyState(87-(i*14))){ //W - Key press
-                    if (player_y[i] > d_UWALL){
+                    if (player_y[i] > dribbling_top_wall){
                         player[i]->moveUp();
                     }
-                    if (player_y[i] > UWALL){
+                    if (player_y[i] > top_wall){
                         if(player[i]->getDirection() == LEFT ){
                             player[i]->changeDirection(UPLEFT);
                         } else if (player[i]->getDirection() == RIGHT ){
@@ -423,10 +436,10 @@ class game_manager {
                         }
                     }
                 } else if (GetAsyncKeyState(83-(i*8))){ //S - Keypress
-                    if (player_y[i] < d_DWALL){
+                    if (player_y[i] < dribbling_bottom_wall){
                         player[i]->moveDown();
                     }
-                    if (player_y[i] < DWALL){
+                    if (player_y[i] < bottom_wall){
                         if(player[i]->getDirection() == LEFT ){
                             player[i]->changeDirection(DOWNLEFT);
                         } else if (player[i]->getDirection() == RIGHT ){
@@ -617,11 +630,7 @@ class game_manager {
                 //otherwise the player is not dribbling the ball
                 player[i]->setDribble(false);
             }
-
         }
-
-        
-        
     }
 
     /****************************************************************************************************
@@ -647,7 +656,7 @@ class game_manager {
 };
 
 int main() {
-    game_manager g(70, 20, 2);
+    game_manager g(70, 20, 6);
     g.Run();
     return 0;
 }
