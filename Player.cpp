@@ -25,7 +25,7 @@ void Player::reset() {
  *
  * @param new_x
  */
-inline void Player::setX(int new_x) {
+void Player::setX(int new_x) {
     x = new_x;
 }
 
@@ -34,7 +34,7 @@ inline void Player::setX(int new_x) {
  *
  * @return The X position of the player.
  */
-inline int Player::getX() {
+int Player::getX() {
     return x;
 }
 
@@ -43,7 +43,7 @@ inline int Player::getX() {
  *
  * @param new_y
  */
-inline void Player::setY(int new_y) {
+void Player::setY(int new_y) {
     y = new_y;
 }
 
@@ -52,42 +52,42 @@ inline void Player::setY(int new_y) {
  *
  * @return The Y postion of the player.
  */
-inline int Player::getY() {
+int Player::getY() {
     return y;
 }
 
 /**
  * Move up one unit.
  */
-inline void Player::moveUp() {
+void Player::moveUp() {
     y++;
 }
 
 /**
  * Move down one unit.
  */
-inline void Player::moveDown() {
+void Player::moveDown() {
     y--;
 }
 
 /**
  * Move left one unit.
  */
-inline void Player::moveLeft() {
+void Player::moveLeft() {
     x--;
 }
 
 /**
  * Move right one unit.
  */
-inline void Player::moveRight() {
+void Player::moveRight() {
     x++;
 }
 
 /**
  * Move diagonally up and left one unit.
  */
-inline void Player::moveUpLeft() {
+void Player::moveUpLeft() {
     y--;
     x--;
 }
@@ -95,7 +95,7 @@ inline void Player::moveUpLeft() {
 /**
  * Move diagnolly up and right one unit.
  */
-inline void Player::moveUpRight() {
+void Player::moveUpRight() {
     y--;
     x++;
 }
@@ -103,7 +103,7 @@ inline void Player::moveUpRight() {
 /**
  * Move diagonally down and left one unit.
  */
-inline void Player::moveDownLeft() {
+void Player::moveDownLeft() {
     y++;
     x--;
 }
@@ -111,7 +111,7 @@ inline void Player::moveDownLeft() {
 /**
  * Move diagonally down and right one unit.
  */
-inline void Player::moveDownRight() {
+void Player::moveDownRight() {
     y++;
     x++;
 }
@@ -121,7 +121,7 @@ inline void Player::moveDownRight() {
  *
  * @param d The new direction of the player.
  */
-inline void Player::setDirection(eDir d) {
+void Player::setDirection(eDir d) {
     direction = d;
 }
 
@@ -130,7 +130,7 @@ inline void Player::setDirection(eDir d) {
  *
  * @return The current direction of the player.
  */
-inline eDir Player::getDirection() {
+eDir Player::getDirection() {
     return direction;
 }
 
@@ -139,7 +139,7 @@ inline eDir Player::getDirection() {
  *
  * @param b
  */
-inline void Player::setDribbling(bool b) {
+void Player::setDribbling(bool b) {
     dribbling = b;
 }
 
@@ -148,6 +148,6 @@ inline void Player::setDribbling(bool b) {
  *
  * @return Whether or not the player is dribbling.
  */
-inline bool Player::isDribbling() {
+bool Player::isDribbling() {
     return dribbling;
 }

@@ -22,29 +22,29 @@ class Player {
 
         void reset();
 
-        inline int getX();
-        inline int getY();
+        int getX();
+        int getY();
 
-        inline void setX(int);
-        inline void setY(int);
+        void setX(int);
+        void setY(int);
 
-        inline void moveUp();
-        inline void moveDown();
+        void moveUp();
+        void moveDown();
 
-        inline void moveLeft();
-        inline void moveRight();
+        void moveLeft();
+        void moveRight();
 
-        inline void moveUpRight();
-        inline void moveUpLeft();
+        void moveUpRight();
+        void moveUpLeft();
 
-        inline void moveDownLeft();
-        inline void moveDownRight();
+        void moveDownLeft();
+        void moveDownRight();
 
-        void changeDirection(eDir);
-        inline eDir getDirection();
+        void setDirection(eDir);
+        eDir getDirection();
         
         void setDribbling(bool);
-        inline bool isDribbling();
+        bool isDribbling();
 };
 
 #endif
