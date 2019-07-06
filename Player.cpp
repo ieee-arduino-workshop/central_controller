@@ -17,7 +17,7 @@ Player::Player(int pos_x, int pos_y) {
  */
 void Player::reset() {
     x = original_x;
-    y = original_y;   
+    y = original_y;
 }
 
 /**
