@@ -27,6 +27,6 @@ class Ball {
         eDir getDirection();
         void setDirection(eDir);
         void randomDirection();
-}
+};
 
 #endif
