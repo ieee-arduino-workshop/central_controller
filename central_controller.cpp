@@ -4,7 +4,7 @@
 using namespace std;
 
 int main() {
-    GameManager* g = new GameManager(70, 20, 6);
+    GameManager* g = new GameManager(70, 20, 2);
 
     g->run();
 

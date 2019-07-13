@@ -8,7 +8,8 @@ using namespace std;
 GameManager::GameManager(int w, int h, int np) {
     quit = false;
     num_players = np;   //number of players
-
+    //Set scores to zeros
+    score_left = score_right = 0;
 
     // Width 0 -> +X & Height 0 -> -Y
     width = w; height = h;
@@ -25,6 +26,10 @@ GameManager::GameManager(int w, int h, int np) {
     
     bottom_wall = height - 1;
     dribbling_bottom_wall = height - 2;
+
+    // Set goal parameters
+    goal_y_min = height*(GOAL_WIDTH - 1)/(2*GOAL_WIDTH);
+    goal_y_max = height*(GOAL_WIDTH + 1)/(2*GOAL_WIDTH);
     
     // load players
     for (int i = 0; i < num_players ; i++) {
@@ -91,6 +96,12 @@ void GameManager::draw() {
         cout << "Player_" << i+1 << " X : " << players[i]->getX() << " Player_" << i+1 << " Y : " << players[i]->getY() << endl;
     }
     
+    //Display current score
+    cout << "Score Left: " << score_left  << " Score Right: " << score_right << endl;
+    
+    //Debug values
+    cout << "DEBUG1: " << goal_y_min << " DEBUG2: " << goal_y_max << endl;
+    
     //Draw the top wall for the game
     for (int i = 0; i < width + 2; i++) {
         cout << "\xB2";
@@ -103,13 +114,18 @@ void GameManager::draw() {
         // Draw rows
         for (int j = 0; j < width; j++){
             
-
             // Draw the wall part at the start of every row - Using HEX character codes
-            if (j == 0) {
-                cout << "\xB2";
+            //if height is outside goal area then draw wall, else draw goal
+            if (j == 0 ) {
+                if (i < goal_y_min || i > goal_y_max ){
+                    cout << "\xB2";
+                }
+                else{
+                    cout << "|";
+                }
             }
             
-            //Draw player location
+            //Draw player location (modify depends how many players)
             if (player_x[0] == j && player_y[0] == i) {
                 cout << "1";
             }
@@ -137,7 +153,13 @@ void GameManager::draw() {
 
            // Draw the wall part at the end of every row
             if (j == width - 1) {
-                cout << "\xB2";
+                //if height is outside goal area then draw wall, else draw goal
+                if (i < goal_y_min || i > goal_y_max ){
+                    cout << "\xB2";
+                }
+                else{
+                    cout << "|";
+                }
             }
         }
         cout << endl;
@@ -291,6 +313,19 @@ void GameManager::input() {
 #endif // end debug flag
 
 /**
+ * Update the game score
+ */
+void GameManager::score(bool team)	//update score of a particular player
+	{
+		if (team == L_TEAM)	//if address of player belong to player 1
+			score_left++;
+		else if (team == R_TEAM)	//else if address of player belong to player 2
+			score_right++;
+
+		reset();
+	}
+
+/**
  * Game logic functionality. Ball bouncing, kicking, player position boundary
  * check, and ball position boundary check.
  */
@@ -344,7 +379,7 @@ void GameManager::logic() {
     }
 
     // Right wall hit
-    if (ball_x == width - 1) {
+    if (ball_x == (width - 1) && (ball_y < goal_y_min || ball_y > goal_y_max)) {
         switch (ball->getDirection()) {
         case RIGHT:
             ball->setDirection(LEFT);
@@ -359,9 +394,13 @@ void GameManager::logic() {
             break;
         }
     }
+    // Right goal hit
+    else if (ball_x == (width - 1) && (ball_y >= goal_y_min || ball_y <= goal_y_max )){
+        score(L_TEAM);
+    }
 
     // Left wall hit
-    if (ball_x == 0) {
+    if (ball_x == 0 && (ball_y < goal_y_min || ball_y > goal_y_max )) {
         switch (ball->getDirection()) {
         case LEFT:
             ball->setDirection(RIGHT);
@@ -375,6 +414,10 @@ void GameManager::logic() {
         default:
             break;
         }
+    }
+    // Left goal hit
+    else if (ball_x == 0 && (ball_y >= goal_y_min || ball_y <= goal_y_max )){
+        score(R_TEAM);
     }
 
     //ball should move if no player is dribbling it
