@@ -60,14 +60,14 @@ int Player::getY() {
  * Move up one unit.
  */
 void Player::moveUp() {
-    y++;
+    y--;
 }
 
 /**
  * Move down one unit.
  */
 void Player::moveDown() {
-    y--;
+    y++;
 }
 
 /**
