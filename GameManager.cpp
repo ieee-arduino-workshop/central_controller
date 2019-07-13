@@ -74,6 +74,17 @@ void GameManager::draw() {
     // Clear the terminal output
     system("cls");
     
+    // Get the location of all objects
+    int player_x[num_players];
+    int player_y[num_players];
+    
+    for (int i = 0; i < num_players; i++){
+        player_x[i] = players[i]->getX();
+        player_y[i] = players[i]->getY();
+    }
+    int ball_x = ball->getX();
+    int ball_y = ball->getY();
+
     //Display current player and ball position
     cout << "Ball X : " << ball->getX() << " Ball Y : " << ball->getY() << endl;
     for (int i = 0; i < num_players; i++){
@@ -91,16 +102,7 @@ void GameManager::draw() {
 
         // Draw rows
         for (int j = 0; j < width; j++){
-            // Get the location of all objects
-            int player_x[num_players];
-            int player_y[num_players];
             
-            for (int i = 0; i < num_players; i++){
-                player_x[i] = players[i]->getX();
-                player_y[i] = players[i]->getY();
-            }
-            int ball_x = ball->getX();
-            int ball_y = ball->getY();
 
             // Draw the wall part at the start of every row - Using HEX character codes
             if (j == 0) {
@@ -109,22 +111,22 @@ void GameManager::draw() {
             
             //Draw player location
             if (player_x[0] == j && player_y[0] == i) {
-                cout << "\xFE";
+                cout << "1";
             }
             else if (player_x[1] == j && player_y[1] == i) {
-                cout << "\xFE";
+                cout << "2";
             }
             else if (player_x[2] ==j && player_y[2] == i) {
-                cout << "\xFE";
+                cout << "3";
             }
             else if (player_x[3] == j && player_y[3] == i) {
-                cout << "\xFE";
+                cout << "4";
             }
             else if (player_x[4] ==j && player_y[4] == i) {
-                cout << "\xFE";
+                cout << "5";
             }
             else if (player_x[5] == j && player_y[5] == i) {
-                cout << "\xFE";
+                cout << "6";
             }
             // Draw the ball
             else if (ball_x == j && ball_y == i) {
