@@ -12,13 +12,13 @@
 #include "Ball.h"
 #include "Player.h"
 
-#define MAX_PLAYERS 12
+#define MAX_PLAYERS 6
 
 #define L_TEAM_X (width / 4)
 #define R_TEAM_X (3 * width / 4)
 
-#define L_TEAM_Y(c) (height * (c + 2) / num_players + 2)
-#define R_TEAM_Y(c) (height * (c + 1) / num_players + 2)
+#define L_TEAM_Y(c) (height * (c + 2) / (num_players + 2))
+#define R_TEAM_Y(c) (height * (c + 1) / (num_players + 2))
 
 class GameManager {
     private:
