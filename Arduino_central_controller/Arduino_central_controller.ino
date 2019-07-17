@@ -9,11 +9,20 @@
 *
 */
 #include <SPI.h>
+
+/// Include RF24 library
 #include <nRF24L01.h>
 #include <RF24.h>
+
+
+/// include player packet struct library
 #include <packet.h>
+
+///include game engine library - developed by Hai,Sath - ported by Long
 #include <game_engine.h>
 
+
+/// assign chip_enable and chi PIN for RF
 #define CE 5   // set chip enable pin
 #define CSN 10 //Set chip select pin.
 
@@ -135,7 +144,7 @@ void loop()
   {
     radio.read(&gotData, 2); /// read 2-byte of data
     Serial.print("Received data from pipe: ");
-    Serial.println(pipeNum + 1); //print which pipe or transmitter this is from
+    Serial.println(pipeNum+1); //print which pipe or transmitter this is from
     // Serial.print("They guess number: ");
     // Serial.println(gotData); //print payload or the number the transmitter guessed
 
