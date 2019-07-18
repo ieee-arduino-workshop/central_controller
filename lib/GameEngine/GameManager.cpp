@@ -85,15 +85,16 @@ void GameManager::reset() {
  */
 void GameManager::draw() {
     // Clear the terminal output
-    Serial.print("\033[0H\033[0J");
+    
     
     // Get the location of all objects
     int player_x[num_players];
     int player_y[num_players];
-    
+    eDir player_direction[num_players];
     for (int i = 0; i < num_players; i++){
         player_x[i] = players[i]->getX();
         player_y[i] = players[i]->getY();
+        player_direction[i] = players[i]->getDirection();
     }
     int ball_x = ball->getX();
     int ball_y = ball->getY();
@@ -105,10 +106,43 @@ void GameManager::draw() {
         Serial.print(i+1);
         Serial.print(" X: ");
         Serial.print(player_x[i]);
-        Serial.print("\tPlayer ");
-        Serial.print(i+1);
-        Serial.print(" Y: ");
-        Serial.println(player_y[i]);
+        Serial.print("\tY: ");
+        Serial.print(player_y[i]);
+        Serial.print("\tDirection: ");
+        // Serial.print("Before switch case");
+        switch (player_direction[i])
+        {
+        case STOP:
+            Serial.print("STOP");
+            break;
+        case LEFT:
+            Serial.print("LEFT");
+            break;
+        case RIGHT:
+            Serial.print("RIGHT");
+            break;
+        case UP:
+            Serial.print("UP");
+            break;
+        case DOWN:
+            Serial.print("DOWN");
+            break;
+        case UPLEFT:
+            Serial.print("UPLEFT");
+            break;
+        case UPRIGHT:
+            Serial.print("UPRIGHT");
+            break;
+        case DOWNLEFT:
+            Serial.print("DOWNLEFT");
+            break;
+        case DOWNRIGHT:
+            Serial.print("DOWNRIGHT");
+            break;
+        default:
+            break;
+        }
+        Serial.println();
     }
     
     //Display current score
@@ -184,6 +218,7 @@ void GameManager::draw() {
         Serial.print("\xB2");
     }
     Serial.println();
+    
 
 }
 
@@ -196,6 +231,13 @@ void GameManager::input(packet *p) {
     int player_x = players[i]->getX();
     int player_y = players[i]->getY();
     int player_dribble = players[i]->isDribbling();
+    Serial.println("\033[0H\033[0J");
+    Serial.print("INPUT STR:");
+    Serial.print(" R: "); Serial.print(p->right);
+    Serial.print(" L: "); Serial.print(p->left);
+    Serial.print(" U: "); Serial.print(p->up);
+    Serial.print(" D: "); Serial.print(p->down);
+    Serial.print(" ID: "); Serial.println(p->player_id);
 
     
     //if dribble is on, the wall of the player 
@@ -220,7 +262,7 @@ void GameManager::input(packet *p) {
             players[i]->setDirection(LEFT);
         }
     } 
-    if(p->right){ //D - Keypressed
+    else if(p->right){ //D - Keypressed
         if (player_x < dribbling_right_wall){
             players[i]->moveRight();
         }
@@ -243,7 +285,7 @@ void GameManager::input(packet *p) {
             }
         }
     }
-    if (p->down){ //S - Keypress
+    else if (p->down){ //S - Keypress
         if (player_y < dribbling_bottom_wall){
             players[i]->moveDown();
         }
@@ -298,15 +340,19 @@ void GameManager::input(packet *p) {
         }
         ball->setDirection(players[i]->getDirection());
 
-        
+        // kick - Key press
+        if (p->kick) {
+            players[i]->setDribbling(false);
+        }
 
-    // kick - Key press
-    if (p->kick) {
-        players[i]->setDribbling(false);
     }
 
-        
-    }
+    Serial.print("INPUT END:");
+    Serial.print(" R: "); Serial.print(p->right);
+    Serial.print(" L: "); Serial.print(p->left);
+    Serial.print(" U: "); Serial.print(p->up);
+    Serial.print(" D: "); Serial.print(p->down);
+    Serial.print(" ID: "); Serial.println(p->player_id);
 }
 
 
@@ -487,7 +533,6 @@ void GameManager::raw_output(){
         Serial.print("\tY: ");
         Serial.print(player_y[i]);
         Serial.print("\tDirection: ");
-        Serial.print("Before switch case");
         switch (player_direction[i])
         {
         case STOP:
@@ -520,7 +565,6 @@ void GameManager::raw_output(){
         default:
             break;
         }
-        Serial.print("after switch case");
     }
     
     //Display current score

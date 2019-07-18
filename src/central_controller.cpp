@@ -22,6 +22,8 @@
 
 /// create object RF24
 RF24 radio(CE, CSN); // CE, CSN
+// uint16_t prev_value = 0;
+GameManager soccer_game(70, 20, 2);
 /// address of sender_01, can create 6 address for 6 different sender
 //const byte address[2][6] = {"00001", "00002"};
 // const byte address[][6] = {"00001","22222"};
@@ -100,8 +102,7 @@ void print_data(packet player)
 
 }
 
-// uint16_t prev_value = 0;
-GameManager soccer_game(70, 20, 2);
+
 
 /**
    * @brief ----------create random data for one player-----------------------------
@@ -146,21 +147,17 @@ void loop()
     // if (prev_value != Player1.packet_data)
     // Serial.print("Player ID ");
     // Serial.println(Player_packet.player_id); //print payload or the number the transmitter guessed
-    {
-      // print_data(Player_packet);
-    }
+    // print_data(Player_packet);
     // prev_value = Player1.packet_data;
     soccer_game.input(&Player_packet);
     soccer_game.logic();
-    soccer_game.raw_output();
+    soccer_game.draw();
     // Serial.println(micros()-previous);
     // previous=micros();
     
-  }
-
-  
+  }  
   // enable draw function for debugging purpose
- 
+  
 
   // Serial.println(random(0,15));
   //Packet.packet_data = Packet.packet_data & 0xFFE7 ;// 11111111 11100111;
