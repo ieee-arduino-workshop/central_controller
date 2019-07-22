@@ -42,12 +42,12 @@ GameManager::GameManager(int w, int h, int np) {
     for (int i = 0; i < num_players ; i++) {
         // even players on the left side
         if (i % 2 == 0) {
-            players[i] = new Player(L_TEAM_X, L_TEAM_Y(i));
+            players[i] = new Player(L_TEAM_X, L_TEAM_Y(i), L_TEAM);
         }
 
         // odd players on the right side
         else {
-            players[i] = new Player(R_TEAM_X, R_TEAM_Y(i));
+            players[i] = new Player(R_TEAM_X, R_TEAM_Y(i), R_TEAM);
         }
     }
 
@@ -91,10 +91,12 @@ void GameManager::draw() {
     int player_x[num_players];
     int player_y[num_players];
     eDir player_direction[num_players];
+    bool player_stun[num_players];
     for (int i = 0; i < num_players; i++){
         player_x[i] = players[i]->getX();
         player_y[i] = players[i]->getY();
         player_direction[i] = players[i]->getDirection();
+        player_stun[i] = players[i]->getStun();
     }
     int ball_x = ball->getX();
     int ball_y = ball->getY();
@@ -175,10 +177,21 @@ void GameManager::draw() {
             
             //Draw player location (modify depends how many players)
             if (player_x[0] == j && player_y[0] == i) {
-                Serial.print("1");
+                if (!player_stun[0]){
+                    Serial.print("1");
+                }
+                else {
+                    Serial.print("X");
+                }
+                
             }
             else if (player_x[1] == j && player_y[1] == i) {
-                Serial.print("2");
+                if (!player_stun[1]){
+                    Serial.print("2");
+                }
+                else {
+                    Serial.print("X");
+                }
             }
             else if (player_x[2] ==j && player_y[2] == i) {
                 Serial.print("3");
@@ -231,6 +244,7 @@ void GameManager::input(packet *p) {
     int player_x = players[i]->getX();
     int player_y = players[i]->getY();
     int player_dribble = players[i]->isDribbling();
+    bool player_stun = players[i]->getStun();
     Serial.println("\033[0H\033[0J");
     Serial.print("INPUT STR:");
     Serial.print(" R: "); Serial.print(p->right);
@@ -240,7 +254,7 @@ void GameManager::input(packet *p) {
     Serial.print(" ID: "); Serial.println(p->player_id);
 
     
-    //if dribble is on, the wall of the player 
+    //if dribble is on, the wall of the player is changed 
     if(player_dribble) {
         dribbling_left_wall = 1;
         dribbling_top_wall = 1;
@@ -254,105 +268,109 @@ void GameManager::input(packet *p) {
         dribbling_bottom_wall = bottom_wall;
     }
 
-    if (p->left) { //A - Keypressed
-        if (player_x > dribbling_left_wall){    //if player 
-            players[i]->moveLeft();
-        }
-        if (player_x > left_wall){
-            players[i]->setDirection(LEFT);
-        }
-    } 
-    else if(p->right){ //D - Keypressed
-        if (player_x < dribbling_right_wall){
-            players[i]->moveRight();
-        }
-        if (player_x < right_wall){
-            players[i]->setDirection(RIGHT);
-        }
-    } 
-    
-    if (p->up){ //W - Key press
-        if (player_y > dribbling_top_wall){
-            players[i]->moveUp();
-        }
-        if (player_y > top_wall){
-            if(players[i]->getDirection() == LEFT ){
-                players[i]->setDirection(UPLEFT);
-            } else if (players[i]->getDirection() == RIGHT ){
-                players[i]->setDirection(UPRIGHT);
-            } else {
-                players[i]->setDirection(UP);
+    if (!player_stun){
+        
+        if (p->left) { //A - Keypressed
+            if (player_x > dribbling_left_wall){    //if player 
+                players[i]->moveLeft();
             }
-        }
-    }
-    else if (p->down){ //S - Keypress
-        if (player_y < dribbling_bottom_wall){
-            players[i]->moveDown();
-        }
-        if (player_y < bottom_wall){
-            if(players[i]->getDirection() == LEFT ){
-                players[i]->setDirection(DOWNLEFT);
-            } else if (players[i]->getDirection() == RIGHT ){
-                players[i]->setDirection(DOWNRIGHT);
-            } else {
+            if (player_x > left_wall){
+                players[i]->setDirection(LEFT);
+            }else if (players[i]->getDirection() == LEFT){
+                players[i]->setDirection(RIGHT);
+            }
+        } 
+        else if(p->right){ //D - Keypressed
+            if (player_x < dribbling_right_wall){
+                players[i]->moveRight();
+            }
+            if (player_x < right_wall){
+                players[i]->setDirection(RIGHT);
+            }else if (players[i]->getDirection() == RIGHT){
+                players[i]->setDirection(LEFT);
+            }
+        } 
+        
+        if (p->up){ //W - Key press
+            if (player_y > dribbling_top_wall){
+                players[i]->moveUp();
+            }
+            if (player_y > top_wall){
+                if(players[i]->getDirection() == LEFT ){
+                    players[i]->setDirection(UPLEFT);
+                } else if (players[i]->getDirection() == RIGHT ){
+                    players[i]->setDirection(UPRIGHT);
+                } else {
+                    players[i]->setDirection(UP);
+                } 
+            }else if (players[i]->getDirection() == UP ){
                 players[i]->setDirection(DOWN);
             }
         }
-    }
-
-    player_x = players[i]->getX();
-    player_y = players[i]->getY();
-    if(player_dribble){
-        switch(players[i]->getDirection()){
-            case LEFT:
-                ball->setX(player_x - 1);
-                ball->setY(player_y);
-                break;
-            case UP:
-                ball->setX(player_x);
-                ball->setY(player_y - 1);
-                break;
-            case RIGHT:
-                ball->setX(player_x + 1);
-                ball->setY(player_y);
-                break;
-            case DOWN:
-                ball->setX(player_x);
-                ball->setY(player_y + 1);
-                break;
-            case UPLEFT:
-                ball->setX(player_x - 1);
-                ball->setY(player_y - 1);
-                break;
-            case UPRIGHT:
-                ball->setX(player_x + 1);
-                ball->setY(player_y - 1);
-                break;
-            case DOWNRIGHT:
-                ball->setX(player_x + 1);
-                ball->setY(player_y + 1);
-                break;
-            case DOWNLEFT:
-                ball->setX(player_x - 1);
-                ball->setY(player_y + 1);
-                break;
-            default: break;
-        }
-        ball->setDirection(players[i]->getDirection());
-
-        // kick - Key press
-        if (p->kick) {
-            players[i]->setDribbling(false);
+        else if (p->down){ //S - Keypress
+            if (player_y < dribbling_bottom_wall){
+                players[i]->moveDown();
+            }
+            if (player_y < bottom_wall){
+                if(players[i]->getDirection() == LEFT ){
+                    players[i]->setDirection(DOWNLEFT);
+                } else if (players[i]->getDirection() == RIGHT ){
+                    players[i]->setDirection(DOWNRIGHT);
+                } else {
+                    players[i]->setDirection(DOWN);
+                }
+            }else if (players[i]->getDirection() == DOWN ){
+                players[i]->setDirection(UP);
+            }
         }
 
+        player_x = players[i]->getX();
+        player_y = players[i]->getY();
+        if(player_dribble){
+            switch(players[i]->getDirection()){
+                case LEFT:
+                    ball->setX(player_x - 1);
+                    ball->setY(player_y);
+                    break;
+                case UP:
+                    ball->setX(player_x);
+                    ball->setY(player_y - 1);
+                    break;
+                case RIGHT:
+                    ball->setX(player_x + 1);
+                    ball->setY(player_y);
+                    break;
+                case DOWN:
+                    ball->setX(player_x);
+                    ball->setY(player_y + 1);
+                    break;
+                case UPLEFT:
+                    ball->setX(player_x - 1);
+                    ball->setY(player_y - 1);
+                    break;
+                case UPRIGHT:
+                    ball->setX(player_x + 1);
+                    ball->setY(player_y - 1);
+                    break;
+                case DOWNRIGHT:
+                    ball->setX(player_x + 1);
+                    ball->setY(player_y + 1);
+                    break;
+                case DOWNLEFT:
+                    ball->setX(player_x - 1);
+                    ball->setY(player_y + 1);
+                    break;
+                default: break;
+            }
+            ball->setDirection(players[i]->getDirection());
+
+            // kick - Key press
+            if (p->kick) {
+                players[i]->setDribbling(false);
+            }
+        }
     }
 
-    Serial.print("INPUT END:");
-    Serial.print(" R: "); Serial.print(p->right);
-    Serial.print(" L: "); Serial.print(p->left);
-    Serial.print(" U: "); Serial.print(p->up);
-    Serial.print(" D: "); Serial.print(p->down);
-    Serial.print(" ID: "); Serial.println(p->player_id);
 }
 
 
@@ -486,17 +504,54 @@ void GameManager::logic() {
     ball_x = ball->getX();
     ball_y = ball->getY();
 
+    
+
+
+    bool same_player = false;
+    bool tackling = false;
+    Player *player_close = NULL;
+    Player *tackle_player = NULL;
+
     // Calculate the distance between the ball and player
     for (int i = 0; i < num_players; i++){
-        int distance_between_player_and_ball = sqrt(pow((ball_x - player_x[i]), 2) + pow((ball_y - player_y[i]), 2));
-        // Catching the ball when it touches the player
-        if (distance_between_player_and_ball == 1 || distance_between_player_and_ball == 0) {
-            //set the new player dribbling to true
-            players[i]->setDribbling(true);
+        players[i]->setDribbling(false);
+        // check if the current player is stunned, if they are decrease stun
+        if((players[i]->getStun())) {
+            players[i]->decreaseStun();
+        }else{
+            int distance_between_player_and_ball = sqrt(pow((ball_x - player_x[i]), 2) + pow((ball_y - player_y[i]), 2));
+            // Catching the ball when it touches the player
+            if (distance_between_player_and_ball <= 1) {
+                //Stores a player within range
+                player_close = players[i];
+                //Check whether last dribbling player is still near ball
+                if(last_player == players[i]){
+                    same_player = true;
+                }
+                //Checks whether a tackle is occuring
+                if (players[i]->getTeam() != last_player_team){
+                    tackle_player = players[i];
+                    tackling = true;
+                }
+            }
         }
-        else {
-            //otherwise the player is not dribbling the ball
-            players[i]->setDribbling(false);
+        
+    }
+    //If the same player as last tick is near the ball and there is no tackle
+    if (same_player && !tackling){
+        last_player->setDribbling(true);
+    }else if (same_player && tackling){//If the same player as last tick is near the ball and there is tackling
+        last_player->setStun(100);// set stun to true for 10 frames
+        tackle_player->setDribbling(true);
+        last_player = tackle_player;
+        last_player_team = tackle_player->getTeam();
+    }else if (!same_player){//If the player who was dribbling the ball is no longer dribbling the ball
+        last_player = player_close;
+        if(player_close != NULL){
+            player_close->setDribbling(true);
+            last_player_team = player_close->getTeam();
+        }else{
+            last_player = NULL;
         }
     }
 }
@@ -570,6 +625,8 @@ void GameManager::raw_output(){
     //Display current score
     Serial.println((String)"Score Left: " + score_left + " Score Right: " + score_right);
 }
+
+
 
 /**
  * Draw the game and monitor input if in debugging mode. Run game logic regardless.

@@ -41,6 +41,8 @@ class GameManager {
         int dribbling_top_wall, dribbling_bottom_wall;
         int top_wall, left_wall, bottom_wall, right_wall;
         int goal_y_max, goal_y_min;
+        Player *last_player;
+        bool last_player_team;
 
     public:
         GameManager(int, int, int);
