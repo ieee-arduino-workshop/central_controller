@@ -15,8 +15,8 @@ class Player {
         bool team;
 
         // tackled status of the player
-        bool tackled;
-        int timeout;
+        bool stunned;
+        int stun_time;
 
         // direction of the player
         eDir direction;
@@ -25,7 +25,7 @@ class Player {
         int original_x, original_y;
 
     public:
-        Player(int, int);
+        Player(int, int, bool);
 
         void reset();
 
@@ -49,6 +49,12 @@ class Player {
 
         void setDirection(eDir);
         eDir getDirection();
+        
+        bool getTeam();
+        
+        bool getStun();
+        void setStun(int);
+        void decreaseStun();
         
         void setDribbling(bool);
         bool isDribbling();

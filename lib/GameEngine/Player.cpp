@@ -3,11 +3,13 @@
 /**
  * Constructor.
  */
-Player::Player(int pos_x, int pos_y) {
+Player::Player(int pos_x, int pos_y, bool t) {
     dribbling = false;
+    stunned = false;
     original_x = pos_x;
     original_y = pos_y;
     direction = STOP;
+    team = t;
     x = pos_x;
     y = pos_y;
 }
@@ -135,6 +137,15 @@ eDir Player::getDirection() {
 }
 
 /**
+ * Get the player's team.
+ *
+ * @return The current team of the player.
+ */
+bool Player::getTeam() {
+    return team;
+}
+
+/**
  * Set the player's state as dribbling.
  *
  * @param b
@@ -150,4 +161,22 @@ void Player::setDribbling(bool b) {
  */
 bool Player::isDribbling() {
     return dribbling;
+}
+
+bool Player::getStun(){
+    return stunned;
+}
+
+void Player::setStun(int count){
+    stun_time = count;
+    stunned = true;
+}
+
+void Player::decreaseStun(){
+    stun_time--;
+    if (stun_time <= 0){
+        stunned = false;
+    }
+    Serial.print("Stun Time: ");
+    Serial.println(stun_time);
 }

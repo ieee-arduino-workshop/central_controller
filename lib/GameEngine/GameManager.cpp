@@ -626,8 +626,6 @@ void GameManager::raw_output(){
     Serial.println((String)"Score Left: " + score_left + " Score Right: " + score_right);
 }
 
-
-
 /**
  * Draw the game and monitor input if in debugging mode. Run game logic regardless.
  */
