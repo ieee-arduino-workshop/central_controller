@@ -54,6 +54,7 @@ class GameManager {
         void input(packet *);
         void logic();
         void run();
+        void send();
 };
 
 #endif

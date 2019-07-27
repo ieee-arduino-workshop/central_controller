@@ -22,4 +22,10 @@ typedef union {
     };
 } packet;
 
+typedef struct {
+    uint8_t id;
+    uint16_t x;
+    uint16_t y;
+} send_packet;
+
 #endif

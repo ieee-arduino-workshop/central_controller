@@ -38,16 +38,26 @@ GameManager::GameManager(int w, int h, int np) {
 	goal_y_min = height*(GOAL_WIDTH - 1)/(2*GOAL_WIDTH);
 	goal_y_max = height*(GOAL_WIDTH + 1)/(2*GOAL_WIDTH);
 	
+    // temporary counter for player id fpga side
+    uint8_t temp_count_odd = 0x01;
+    uint8_t temp_count_even = 0x06;
 	// load players
 	for (int i = 0; i < num_players ; i++) {
 		// even players on the left side
 		if (i % 2 == 0) {
-			players[i] = new Player(L_TEAM_X, L_TEAM_Y(i), L_TEAM);
+            if (temp_count_odd <= 5){
+                players[i] = new Player(L_TEAM_X, L_TEAM_Y(i), L_TEAM, temp_count_odd);
+                temp_count_odd++;
+            }
+
 		}
 
 		// odd players on the right side
 		else {
-			players[i] = new Player(R_TEAM_X, R_TEAM_Y(i), R_TEAM);
+            if (temp_count_even > 5){
+                players[i] = new Player(R_TEAM_X, R_TEAM_Y(i), R_TEAM, temp_count_even);
+                temp_count_even++;
+            }
 		}
 	}
 
@@ -670,20 +680,32 @@ void GameManager::raw_output(){
 }
 
 /**
- * Draw the game and monitor input if in debugging mode. Run game logic regardless.
+ * Send player information to the DE10
+ * Send Players ID, X & Y Location
  */
-void GameManager::run() {
-	// While q (quit) button is not pressed
-	while (!quit) {
+void GameManager::send() {
+    send_packet send_players[num_players];
+    send_packet send_ball;
 	
-		// Draw the board
-		draw();
-
-		// Record input from player
-		// input();
-	
-
-		// Check logic each frame (not needed atm)
-		logic();
-	}
+    for (int i = 0; i < num_players; i++){
+        send_players[i].x = (uint8_t)players[i]->getX();
+        send_players[i].y = (uint8_t)players[i]->getY();
+        send_players[i].id = (uint8_t)players[i]->getId();
+        // Change DEC to BIN when actually sending to FPGA
+        Serial.print(send_players[i].id, DEC);
+        Serial.print(" ");
+        Serial.print(send_players[i].x, DEC);
+        Serial.print(" ");
+        Serial.print(send_players[i].y, DEC);
+        Serial.println();
+    }
+    send_ball.id = 0x88;    //id of the ball
+    send_ball.x = (uint8_t)ball->getX();
+    send_ball.y = (uint8_t)ball->getY();
+    Serial.print(send_ball.id, DEC);
+    Serial.print(" ");
+    Serial.print(send_ball.x, DEC);
+    Serial.print(" ");
+    Serial.print(send_ball.y, DEC);
+    Serial.println();
 }

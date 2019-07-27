@@ -3,7 +3,7 @@
 /**
  * Constructor.
  */
-Player::Player(int pos_x, int pos_y, bool t) {
+Player::Player(int pos_x, int pos_y, bool t, uint8_t i) {
     dribbling = false;
     stunned = false;
     original_x = pos_x;
@@ -12,6 +12,7 @@ Player::Player(int pos_x, int pos_y, bool t) {
     team = t;
     x = pos_x;
     y = pos_y;
+    id = i;
 }
 
 /**
@@ -170,6 +171,15 @@ bool Player::getStun(){
 void Player::setStun(int count){
     stun_time = count;
     stunned = true;
+}
+
+/**
+ * Get the id of the player.
+ *
+ * @return The id of the player.
+ */
+uint8_t Player::getId() {
+    return id;
 }
 
 void Player::decreaseStun(){

@@ -8,6 +8,9 @@ class Player {
         // position of the player
         int x, y;
 
+        // id of the player
+        uint8_t id;
+
         // whether or not the player is dribbling the ball
         bool dribbling;
 
@@ -25,7 +28,7 @@ class Player {
         int original_x, original_y;
 
     public:
-        Player(int, int, bool);
+        Player(int, int, bool, uint8_t);
 
         void reset();
 
@@ -58,6 +61,8 @@ class Player {
         
         void setDribbling(bool);
         bool isDribbling();
+
+        uint8_t getId ();
 };
 
 #endif
