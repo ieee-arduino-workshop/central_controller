@@ -23,7 +23,7 @@
 /// create object RF24
 RF24 radio(CE, CSN); // CE, CSN
 // uint16_t prev_value = 0;
-GameManager soccer_game(70, 20, 4);
+GameManager soccer_game(720, 480, 4);
 /// address of sender_01, can create 6 address for 6 different sender
 //const byte address[2][6] = {"00001", "00002"};
 // const byte address[][6] = {"00001","22222"};
@@ -38,6 +38,7 @@ void setup()
 {
   // init serial port for debugging
   Serial.begin(115200);
+  Serial1.begin(115200);
 
   // for (int i = 0; i < NO_PLAYER; i++)
   // {
@@ -151,7 +152,7 @@ void loop()
     // prev_value = Player1.packet_data;
     soccer_game.input(&Player_packet);
     soccer_game.logic();
-    soccer_game.draw();
+    // soccer_game.draw();
     soccer_game.send();
     // Serial.println(micros()-previous);
     // previous=micros();
