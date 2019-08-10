@@ -3,6 +3,9 @@
 
 #include "direction.h"
 #include <Arduino.h>
+
+#define SPEED 10
+
 class Player {
     private:
         // position of the player

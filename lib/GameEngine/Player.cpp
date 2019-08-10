@@ -60,63 +60,63 @@ int Player::getY() {
 }
 
 /**
- * Move up one unit.
+ * Move up SPEED units.
  */
 void Player::moveUp() {
-    y--;
+    y -= SPEED;
 }
 
 /**
- * Move down one unit.
+ * Move down SPEED units.
  */
 void Player::moveDown() {
-    y++;
+    y += SPEED;
 }
 
 /**
- * Move left one unit.
+ * Move left SPEED units.
  */
 void Player::moveLeft() {
-    x--;
+    x -= SPEED;
 }
 
 /**
- * Move right one unit.
+ * Move right SPEED units.
  */
 void Player::moveRight() {
-    x++;
+    x += SPEED;
 }
 
 /**
- * Move diagonally up and left one unit.
+ * Move diagonally up and left SPEED units.
  */
 void Player::moveUpLeft() {
-    y--;
-    x--;
+    y -= SPEED;
+    x -= SPEED;
 }
 
 /**
- * Move diagnolly up and right one unit.
+ * Move diagnolly up and right SPEED units.
  */
 void Player::moveUpRight() {
-    y--;
-    x++;
+    y -= SPEED;
+    x += SPEED;
 }
 
 /**
- * Move diagonally down and left one unit.
+ * Move diagonally down and left SPEED units.
  */
 void Player::moveDownLeft() {
-    y++;
-    x--;
+    y += SPEED;
+    x -= SPEED;
 }
 
 /**
- * Move diagonally down and right one unit.
+ * Move diagonally down and right SPEED units.
  */
 void Player::moveDownRight() {
-    y++;
-    x++;
+    y += SPEED;
+    x += SPEED;
 }
 
 /**
