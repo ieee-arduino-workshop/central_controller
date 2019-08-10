@@ -688,9 +688,9 @@ void GameManager::send() {
     send_packet send_ball;
     
     for (int i = 0; i < num_players; i++){
-        send_players[i].x = (uint8_t)players[i]->getX();
-        send_players[i].y = (uint8_t)players[i]->getY();
-        send_players[i].id = (uint8_t)players[i]->getId();
+        send_players[i].x = (uint16_t)players[i]->getX();
+        send_players[i].y = (uint16_t)players[i]->getY();
+        send_players[i].id = (uint16_t)players[i]->getId();
         
         // Change DEC to BIN when actually sending to FPGA
         Serial1.write(send_players[i].id);
@@ -713,43 +713,10 @@ void GameManager::send() {
         Serial.println();
     }
 
-    // send_players[1].x = (uint8_t)players[1]->getX();
-    // send_players[1].y = (uint8_t)players[1]->getY();
-    // send_players[1].id = (uint8_t)players[1]->getId();
-
-    // // Change DEC to BIN when actually sending to FPGA
-    // Serial1.write(send_players[1].id);
-    // delayMicroseconds(100);
-    // Serial.print(send_players[1].id,HEX);
-    // Serial.print(" ");
-    // // Serial1.write(send_players[1].x);
-
-    // Serial1.write(send_players[1].x>>8 & 0xFF);
-    // delayMicroseconds(100);
-    // Serial1.write(send_players[1].x & 0xFF);
-    // delayMicroseconds(100);
-    // Serial.print(send_players[1].x, HEX);
-    // Serial.print(" ");
-    // // Serial1.write(send_players[1].y);
-
-    // Serial1.write(send_players[1].y>>8 & 0xFF);
-    // delayMicroseconds(100);
-    // Serial1.write(send_players[1].y & 0xFF);
-    // delayMicroseconds(100);
-    // Serial.print(send_players[1].y, HEX);
-    // Serial.println();
-
     send_ball.id = 0x88;    //id of the ball
-    send_ball.x = (uint8_t)ball->getX();
-    send_ball.y = (uint8_t)ball->getY();
-    // Serial1.print(send_ball.id);
-    // Serial1.print("A");
-    // Serial.print(send_ball.id, HEX);
+    send_ball.x = (uint16_t)ball->getX();
+    send_ball.y = (uint16_t)ball->getY();
     Serial.print(" ");
-    // Serial1.print(send_ball.x);
-    // Serial.print(send_ball.x, HEX);
     Serial.print(" ");
-    // Serial1.print(send_ball.y);
-    // Serial.print(send_ball.y, HEX);
     Serial.println();
 }
