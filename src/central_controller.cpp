@@ -23,7 +23,7 @@
 /// create object RF24
 RF24 radio(CE, CSN); // CE, CSN
 // uint16_t prev_value = 0;
-GameManager soccer_game(720, 480, 4);
+GameManager soccer_game(720, 480, 6);
 /// address of sender_01, can create 6 address for 6 different sender
 //const byte address[2][6] = {"00001", "00002"};
 // const byte address[][6] = {"00001","22222"};
@@ -53,7 +53,7 @@ void setup()
   radio.setPALevel(RF24_PA_HIGH);
   //radio.setChannel(108);
   // radio.setPALevel(RF24_PA_MAX);
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 6; i++)
   {
     radio.openReadingPipe(i, address[i]);
   }
