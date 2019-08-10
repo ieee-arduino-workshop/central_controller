@@ -9,7 +9,6 @@
 
 #include <math.h>
 #include <Arduino.h>
-#include <cstdint>
 #include "Ball.h"
 #include "Player.h"
 #include "packet.h"
