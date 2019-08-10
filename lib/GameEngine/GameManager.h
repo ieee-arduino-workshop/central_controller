@@ -9,6 +9,7 @@
 
 #include <math.h>
 #include <Arduino.h>
+#include <cstdint>
 #include "Ball.h"
 #include "Player.h"
 #include "packet.h"
@@ -33,14 +34,14 @@ class GameManager {
     private:
         bool quit;
         Ball* ball;
-        int num_players;
-        int width, height;
-        int score_left, score_right;
+        uint16_t num_players;
+        uint16_t width, height;
+        uint16_t score_left, score_right;
         Player* players[MAX_PLAYERS];
-        int dribbling_left_wall, dribbling_right_wall;
-        int dribbling_top_wall, dribbling_bottom_wall;
-        int top_wall, left_wall, bottom_wall, right_wall;
-        int goal_y_max, goal_y_min;
+        uint16_t dribbling_left_wall, dribbling_right_wall;
+        uint16_t dribbling_top_wall, dribbling_bottom_wall;
+        uint16_t top_wall, left_wall, bottom_wall, right_wall;
+        uint16_t goal_y_max, goal_y_min;
         Player *last_player;
         bool last_player_team;
 

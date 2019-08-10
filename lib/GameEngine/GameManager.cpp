@@ -2,12 +2,7 @@
 Soccer Game Manager to be used for arduino platform
 Authors: Sachith Sirimanna, Anthony Milic, Le Hai Truong
  */
-#include <Arduino.h>
 #include "GameManager.h"
-#include "direction.h"
-#include "packet.h"
-
-using namespace std;
 
 /**
  * Constructor.
@@ -688,9 +683,9 @@ void GameManager::send() {
     send_packet send_ball;
     
     for (int i = 0; i < num_players; i++){
-        send_players[i].x = (uint16_t)players[i]->getX();
-        send_players[i].y = (uint16_t)players[i]->getY();
-        send_players[i].id = (uint16_t)players[i]->getId();
+        send_players[i].x = players[i]->getX();
+        send_players[i].y = players[i]->getY();
+        send_players[i].id = players[i]->getId();
         
         // Change DEC to BIN when actually sending to FPGA
         Serial1.write(send_players[i].id);
