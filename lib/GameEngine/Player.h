@@ -4,7 +4,7 @@
 #include "direction.h"
 #include <Arduino.h>
 
-#define SPEED 10
+#define SPEED 2
 
 class Player {
     private:

@@ -693,14 +693,14 @@ void GameManager::send() {
         Serial.print(send_players[i].id,HEX);
         Serial.print(" ");
         
-        Serial1.write(send_players[i].x>>8 & 0xFF);
+        Serial1.write(send_players[i].x >> 8 & 0xFF);
         delayMicroseconds(100);
         Serial1.write(send_players[i].x & 0xFF);
         delayMicroseconds(100);
         Serial.print(send_players[i].x, HEX);
         Serial.print(" ");
         
-        Serial1.write(send_players[i].y>>8 & 0xFF);
+        Serial1.write(send_players[i].y >> 8 & 0xFF);
         delayMicroseconds(100);
         Serial1.write(send_players[i].y & 0xFF);
         delayMicroseconds(100);
@@ -709,8 +709,26 @@ void GameManager::send() {
     }
 
     send_ball.id = 0x88;    //id of the ball
-    send_ball.x = (uint16_t)ball->getX();
-    send_ball.y = (uint16_t)ball->getY();
+    send_ball.x = ball->getX();
+    send_ball.y = ball->getY();
+
+    Serial1.write(send_ball.id);
+    Serial.print(send_ball.id, HEX);
+    Serial.print(" ");
+
+    Serial1.write(send_ball.x >> 8 & 0xFF);
+    delayMicroseconds(100);
+    Serial1.write(send_ball.x & 0xFF);
+    delayMicroseconds(100);
+    Serial.print(send_ball.x, HEX);
+    Serial.print(" ");
+    
+    Serial1.write(send_ball.y >> 8 & 0xFF);
+    delayMicroseconds(100);
+    Serial1.write(send_ball.y & 0xFF);
+    delayMicroseconds(100);
+    Serial.print(send_ball.y, HEX);
+    
     Serial.print(" ");
     Serial.print(" ");
     Serial.println();
