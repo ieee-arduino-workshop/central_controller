@@ -34,10 +34,10 @@
 #define L_TEAM_Y(c) (height * (c + 2) / (num_players + 2) + OFFSET_X)
 #define R_TEAM_Y(c) (height * (c + 1) / (num_players + 2) + OFFSET_Y)
 
-#define WITHIN_GOAL(y) (ball_y >= goal_y_min || ball_y <= goal_y_max)
+#define WITHIN_GOAL(y) (ball_y >= goal_y_min && ball_y <= goal_y_max)
 
-#define BALL_SPEED 4
-#define PLAYER_SPEED 2
+#define BALL_SPEED 8
+#define PLAYER_SPEED 4
 
 //change the wideness of the goal here (the smaller the wider)
 //1 = height of the field, 2 = 1/2 height, 3 = 1/3, etc.

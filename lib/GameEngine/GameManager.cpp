@@ -30,8 +30,8 @@ GameManager::GameManager(int w, int h, int np) {
     dribbling_bottom_wall = height + OFFSET_Y - 2;
 
     // Set goal parameters
-    goal_y_min = height*(GOAL_WIDTH - 1)/(2*GOAL_WIDTH);
-    goal_y_max = height*(GOAL_WIDTH + 1)/(2*GOAL_WIDTH);
+    goal_y_min = height*(GOAL_WIDTH - 1)/(2*GOAL_WIDTH) + OFFSET_Y;
+    goal_y_max = height*(GOAL_WIDTH + 1)/(2*GOAL_WIDTH) + OFFSET_Y;
 
     // add the players
     for (int i = 0; i < num_players; i++) {
