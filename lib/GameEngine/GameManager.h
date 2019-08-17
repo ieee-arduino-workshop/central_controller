@@ -29,11 +29,11 @@
 #define L_TEAM 0
 #define R_TEAM 1
 
-#define L_TEAM_X (width / 4) + OFFSET_X
-#define R_TEAM_X (3 * width / 4) + OFFSET_Y
+#define L_TEAM_X (width / 4 +  OFFSET_X)
+#define R_TEAM_X (3 * width / 4 + OFFSET_Y)
 
-#define L_TEAM_Y(c) (height * (c + 2) / (num_players + 2)) +OFFSET_X
-#define R_TEAM_Y(c) (height * (c + 1) / (num_players + 2)) + OFFSET_Y
+#define L_TEAM_Y(c) (height * (c + 2) / (num_players + 2) + OFFSET_X)
+#define R_TEAM_Y(c) (height * (c + 1) / (num_players + 2) + OFFSET_Y)
 
 //change the wideness of the goal here (the smaller the wider)
 //1 = height of the field, 2 = 1/2 height, 3 = 1/3, etc.
