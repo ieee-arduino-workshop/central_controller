@@ -4,11 +4,12 @@
 /**
  * Constructor.
  */
-Player::Player(int pos_x, int pos_y, bool t, uint8_t i) {
+Player::Player(int pos_x, int pos_y, bool t, uint8_t i)
+{
     dribbling = false;
     stunned = false;
-    original_x = pos_x + OFFSET_X;
-    original_y = pos_y + OFFSET_Y;
+    original_x = pos_x;
+    original_y = pos_y;
     direction = STOP;
     team = t;
     x = pos_x;
@@ -19,7 +20,8 @@ Player::Player(int pos_x, int pos_y, bool t, uint8_t i) {
 /**
  * Reset the player's position to their initial co-ordinates.
  */
-void Player::reset() {
+void Player::reset()
+{
     x = original_x;
     y = original_y;
 }
@@ -29,7 +31,8 @@ void Player::reset() {
  *
  * @param new_x
  */
-void Player::setX(int new_x) {
+void Player::setX(int new_x)
+{
     x = new_x;
 }
 
@@ -38,7 +41,8 @@ void Player::setX(int new_x) {
  *
  * @return The X position of the player.
  */
-int Player::getX() {
+int Player::getX()
+{
     return x;
 }
 
@@ -47,7 +51,8 @@ int Player::getX() {
  *
  * @param new_y
  */
-void Player::setY(int new_y) {
+void Player::setY(int new_y)
+{
     y = new_y;
 }
 
@@ -56,42 +61,48 @@ void Player::setY(int new_y) {
  *
  * @return The Y postion of the player.
  */
-int Player::getY() {
+int Player::getY()
+{
     return y;
 }
 
 /**
  * Move up SPEED units.
  */
-void Player::moveUp() {
+void Player::moveUp()
+{
     y -= SPEED;
 }
 
 /**
  * Move down SPEED units.
  */
-void Player::moveDown() {
+void Player::moveDown()
+{
     y += SPEED;
 }
 
 /**
  * Move left SPEED units.
  */
-void Player::moveLeft() {
+void Player::moveLeft()
+{
     x -= SPEED;
 }
 
 /**
  * Move right SPEED units.
  */
-void Player::moveRight() {
+void Player::moveRight()
+{
     x += SPEED;
 }
 
 /**
  * Move diagonally up and left SPEED units.
  */
-void Player::moveUpLeft() {
+void Player::moveUpLeft()
+{
     y -= SPEED;
     x -= SPEED;
 }
@@ -99,7 +110,8 @@ void Player::moveUpLeft() {
 /**
  * Move diagnolly up and right SPEED units.
  */
-void Player::moveUpRight() {
+void Player::moveUpRight()
+{
     y -= SPEED;
     x += SPEED;
 }
@@ -107,7 +119,8 @@ void Player::moveUpRight() {
 /**
  * Move diagonally down and left SPEED units.
  */
-void Player::moveDownLeft() {
+void Player::moveDownLeft()
+{
     y += SPEED;
     x -= SPEED;
 }
@@ -115,7 +128,8 @@ void Player::moveDownLeft() {
 /**
  * Move diagonally down and right SPEED units.
  */
-void Player::moveDownRight() {
+void Player::moveDownRight()
+{
     y += SPEED;
     x += SPEED;
 }
@@ -125,7 +139,8 @@ void Player::moveDownRight() {
  *
  * @param d The new direction of the player.
  */
-void Player::setDirection(eDir d) {
+void Player::setDirection(eDir d)
+{
     direction = d;
 }
 
@@ -134,7 +149,8 @@ void Player::setDirection(eDir d) {
  *
  * @return The current direction of the player.
  */
-eDir Player::getDirection() {
+eDir Player::getDirection()
+{
     return direction;
 }
 
@@ -143,7 +159,8 @@ eDir Player::getDirection() {
  *
  * @return The current team of the player.
  */
-bool Player::getTeam() {
+bool Player::getTeam()
+{
     return team;
 }
 
@@ -152,7 +169,8 @@ bool Player::getTeam() {
  *
  * @param b
  */
-void Player::setDribbling(bool b) {
+void Player::setDribbling(bool b)
+{
     dribbling = b;
 }
 
@@ -161,15 +179,18 @@ void Player::setDribbling(bool b) {
  *
  * @return Whether or not the player is dribbling.
  */
-bool Player::isDribbling() {
+bool Player::isDribbling()
+{
     return dribbling;
 }
 
-bool Player::getStun(){
+bool Player::getStun()
+{
     return stunned;
 }
 
-void Player::setStun(int count){
+void Player::setStun(int count)
+{
     stun_time = count;
     stunned = true;
 }
@@ -179,13 +200,16 @@ void Player::setStun(int count){
  *
  * @return The id of the player.
  */
-uint8_t Player::getId() {
+uint8_t Player::getId()
+{
     return id;
 }
 
-void Player::decreaseStun(){
+void Player::decreaseStun()
+{
     stun_time--;
-    if (stun_time <= 0){
+    if (stun_time <= 0)
+    {
         stunned = false;
     }
     Serial.print("Stun Time: ");
