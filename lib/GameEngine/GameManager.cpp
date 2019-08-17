@@ -441,7 +441,7 @@ void GameManager::logic() {
     int ball_y = ball->getY();
 
     // Bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
-    if (ball_y == bottom_wall) {
+    if (ball_y >= bottom_wall) {
         switch (ball->getDirection()) {
         case DOWN:
             ball->setDirection(UP);
@@ -458,7 +458,7 @@ void GameManager::logic() {
     }
 
     // Top wall hit
-    if (ball_y == top_wall) {
+    if (ball_y <= top_wall) {
         switch (ball->getDirection()) {
         case UP:
             ball->setDirection(DOWN);
@@ -475,7 +475,7 @@ void GameManager::logic() {
     }
 
     // Right wall hit
-    if (ball_x == (right_wall) && (ball_y < goal_y_min || ball_y > goal_y_max)) {
+    if (ball_x >= (right_wall) && (ball_y < goal_y_min || ball_y > goal_y_max)) {
         switch (ball->getDirection()) {
         case RIGHT:
             ball->setDirection(LEFT);
@@ -496,7 +496,7 @@ void GameManager::logic() {
     }
 
     // Left wall hit
-    if (ball_x == left_wall && (ball_y < goal_y_min || ball_y > goal_y_max )) {
+    if (ball_x <= left_wall && (ball_y < goal_y_min || ball_y > goal_y_max )) {
         switch (ball->getDirection()) {
         case LEFT:
             ball->setDirection(RIGHT);
