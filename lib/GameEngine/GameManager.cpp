@@ -442,36 +442,12 @@ void GameManager::logic() {
 
     // Bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
     if (ball_y >= bottom_wall) {
-        switch (ball->getDirection()) {
-        case DOWN:
-            ball->setDirection(UP);
-            break;
-        case DOWNRIGHT:
-            ball->setDirection(UPRIGHT);
-            break;
-        case DOWNLEFT:
-            ball->setDirection(UPLEFT);
-            break;
-        default:
-            break;
-        }
+        ball->reset();
     }
 
     // Top wall hit
     if (ball_y <= top_wall) {
-        switch (ball->getDirection()) {
-        case UP:
-            ball->setDirection(DOWN);
-            break;
-        case UPRIGHT:
-            ball->setDirection(DOWNRIGHT);
-            break;
-        case UPLEFT:
-            ball->setDirection(DOWNLEFT);
-            break;
-        default:
-            break;
-        }
+        ball->reset();
     }
 
     // Right wall hit
@@ -480,15 +456,7 @@ void GameManager::logic() {
             score(L_TEAM);
         }
         else {
-            switch (ball->getDirection()) {
-                case UPRIGHT:
-                    ball->setDirection(UPLEFT);
-                    break;
-                case DOWNRIGHT:
-                    ball->setDirection(DOWNLEFT);
-                default:
-                    ball->setDirection(LEFT);
-            }
+            ball->reset();
         }
     }
 
@@ -498,16 +466,7 @@ void GameManager::logic() {
             score(R_TEAM);
         }
         else {
-            switch (ball->getDirection()) {
-                case UPLEFT:
-                    ball->setDirection(UPRIGHT);
-                    break;
-                case DOWNLEFT:
-                    ball->setDirection(DOWNRIGHT);
-                    break;
-                default:
-                    ball->setDirection(RIGHT);
-            }
+            ball->reset();
         }
     }
 
@@ -530,10 +489,9 @@ void GameManager::logic() {
         player_y[i] = players[i]->getY();
         player_dribble[i] = players[i]->isDribbling();
     }
+
     ball_x = ball->getX();
     ball_y = ball->getY();
-
-    
 
     //Resets variables used for game logic
     bool same_player = false;
