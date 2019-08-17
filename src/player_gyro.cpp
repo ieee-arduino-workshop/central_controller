@@ -23,7 +23,7 @@
 #include <MPU6050.h>
 #include <packet.h>  //call gyro sensor library
 
-#define PLAYER_NO 2  // choose from 1 - 12
+#define PLAYER_NO 3  // choose from 1 - 12
 
 // Global variables
 //  Constants variables

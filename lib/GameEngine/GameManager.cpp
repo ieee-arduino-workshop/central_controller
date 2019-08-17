@@ -17,17 +17,17 @@ GameManager::GameManager(int w, int h, int np) {
     width = w; height = h;
 
     // Set wall parameters
-    left_wall = 0;
-    dribbling_left_wall = 1;
+    left_wall = OFFSET_X;
+    dribbling_left_wall = OFFSET_X + 1;
     
-    right_wall = width - 1;
-    dribbling_right_wall = width - 2;
+    right_wall = width + OFFSET_X - 1;
+    dribbling_right_wall = width + OFFSET_X - 2;
     
-    top_wall = 0;
-    dribbling_top_wall = 1;
+    top_wall = OFFSET_Y;
+    dribbling_top_wall = OFFSET_Y + 1;
     
-    bottom_wall = height - 1;
-    dribbling_bottom_wall = height - 2;
+    bottom_wall = height + OFFSET_Y - 1;
+    dribbling_bottom_wall = height + OFFSET_Y - 2;
 
     // Set goal parameters
     goal_y_min = height*(GOAL_WIDTH - 1)/(2*GOAL_WIDTH);
@@ -57,7 +57,7 @@ GameManager::GameManager(int w, int h, int np) {
     }
 
     // set up the ball
-    ball = new Ball(width / 2, height / 2);
+    ball = new Ball((width / 2) + OFFSET_X, (height / 2) + OFFSET_Y);
     
 }
 
@@ -263,10 +263,10 @@ void GameManager::input(packet *p) {
     //When the player is dribbling the ball, they cannot move
     //up against the wall or the ball may clip through
     if(player_dribble) {
-        dribbling_left_wall = 1;
-        dribbling_top_wall = 1;
-        dribbling_right_wall = width - 2;
-        dribbling_bottom_wall = height - 2;
+        dribbling_left_wall = left_wall + 1;
+        dribbling_top_wall = top_wall + 1;
+        dribbling_right_wall = right_wall - 2;
+        dribbling_bottom_wall = bottom_wall - 2;
     }
     else{
         dribbling_left_wall = left_wall;
@@ -440,7 +440,7 @@ void GameManager::logic() {
     int ball_y = ball->getY();
 
     // Bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
-    if (ball_y == height - 1) {
+    if (ball_y == bottom_wall) {
         switch (ball->getDirection()) {
         case DOWN:
             ball->setDirection(UP);
@@ -457,7 +457,7 @@ void GameManager::logic() {
     }
 
     // Top wall hit
-    if (ball_y == 0) {
+    if (ball_y == top_wall) {
         switch (ball->getDirection()) {
         case UP:
             ball->setDirection(DOWN);
@@ -474,7 +474,7 @@ void GameManager::logic() {
     }
 
     // Right wall hit
-    if (ball_x == (width - 1) && (ball_y < goal_y_min || ball_y > goal_y_max)) {
+    if (ball_x == (right_wall) && (ball_y < goal_y_min || ball_y > goal_y_max)) {
         switch (ball->getDirection()) {
         case RIGHT:
             ball->setDirection(LEFT);
@@ -490,12 +490,12 @@ void GameManager::logic() {
         }
     }
     // Right goal hit
-    else if (ball_x == (width - 1) && (ball_y >= goal_y_min || ball_y <= goal_y_max )){
+    else if (ball_x == (right_wall) && (ball_y >= goal_y_min || ball_y <= goal_y_max )){
         score(L_TEAM);
     }
 
     // Left wall hit
-    if (ball_x == 0 && (ball_y < goal_y_min || ball_y > goal_y_max )) {
+    if (ball_x == left_wall && (ball_y < goal_y_min || ball_y > goal_y_max )) {
         switch (ball->getDirection()) {
         case LEFT:
             ball->setDirection(RIGHT);

@@ -5,7 +5,7 @@
 #include <Arduino.h>
 // #include "GameManager.h"
 
-#define SPEED 10 //changed by Long 2019 08 17
+#define SPEED 5
 
 class Player {
     private:
