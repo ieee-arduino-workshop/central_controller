@@ -2,9 +2,9 @@
 #define GAME_MANAGER_H
 
 #ifdef DEBUG
-    #include <iostream>
-    #include <conio.h>
-    #include <Windows.h>
+#include <iostream>
+#include <conio.h>
+#include <Windows.h>
 #endif
 
 #include <math.h>
@@ -13,6 +13,15 @@
 #include "Player.h"
 #include "packet.h"
 #include "direction.h"
+
+/// declare offset of screen based on FPGA configuration
+#define SCR_EDGE_L 20   // x left
+#define SCR_EDGE_R 780  //x right
+#define SCR_EDGE_T 40   // y top
+#define SCR_EDGE_B 560  // y bottom
+
+
+
 
 #define MAX_PLAYERS 12
 
@@ -29,32 +38,33 @@
 //1 = height of the field, 2 = 1/2 height, 3 = 1/3, etc.
 #define GOAL_WIDTH 4
 
-class GameManager {
-    private:
-        bool quit;
-        Ball* ball;
-        uint16_t num_players;
-        uint16_t width, height;
-        uint16_t score_left, score_right;
-        Player* players[MAX_PLAYERS];
-        uint16_t dribbling_left_wall, dribbling_right_wall;
-        uint16_t dribbling_top_wall, dribbling_bottom_wall;
-        uint16_t top_wall, left_wall, bottom_wall, right_wall;
-        uint16_t goal_y_max, goal_y_min;
-        Player *last_player;
-        bool last_player_team;
+class GameManager
+{
+private:
+    bool quit;
+    Ball *ball;
+    uint16_t num_players;
+    uint16_t width, height;
+    uint16_t score_left, score_right;
+    Player *players[MAX_PLAYERS];
+    uint16_t dribbling_left_wall, dribbling_right_wall;
+    uint16_t dribbling_top_wall, dribbling_bottom_wall;
+    uint16_t top_wall, left_wall, bottom_wall, right_wall;
+    uint16_t goal_y_max, goal_y_min;
+    Player *last_player;
+    bool last_player_team;
 
-    public:
-        GameManager(int, int, int);
-        ~GameManager();
-        void score(bool);
-        void reset();
-        void raw_output();
-        void draw();
-        void input(packet *);
-        void logic();
-        void run();
-        void send();
+public:
+    GameManager(int, int, int);
+    ~GameManager();
+    void score(bool);
+    void reset();
+    void raw_output();
+    void draw();
+    void input(packet *);
+    void logic();
+    void run();
+    void send();
 };
 
 #endif

@@ -3,7 +3,9 @@
 
 #include "direction.h"
 #include <Arduino.h>
-
+// #include "GameManager.h"
+#define OFFSET_X 40
+#define OFFSET_Y 60
 #define SPEED 2
 
 class Player {

@@ -1,13 +1,14 @@
 #include "Player.h"
 #include <Arduino.h>
+// #include "GameManager.h"
 /**
  * Constructor.
  */
 Player::Player(int pos_x, int pos_y, bool t, uint8_t i) {
     dribbling = false;
     stunned = false;
-    original_x = pos_x;
-    original_y = pos_y;
+    original_x = pos_x + OFFSET_X;
+    original_y = pos_y + OFFSET_Y;
     direction = STOP;
     team = t;
     x = pos_x;
