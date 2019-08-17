@@ -475,45 +475,40 @@ void GameManager::logic() {
     }
 
     // Right wall hit
-    if (ball_x >= (right_wall) && (ball_y < goal_y_min || ball_y > goal_y_max)) {
-        switch (ball->getDirection()) {
-        case RIGHT:
-            ball->setDirection(LEFT);
-            break;
-        case UPRIGHT:
-            ball->setDirection(UPLEFT);
-            break;
-        case DOWNRIGHT:
-            ball->setDirection(DOWNLEFT);
-            break;
-        default:
-            break;
+    if (ball_x >= right_wall) {
+        if (WITHIN_GOAL(ball_y)) {
+            score(L_TEAM);
         }
-    }
-    // Right goal hit
-    else if (ball_x == (right_wall) && (ball_y >= goal_y_min || ball_y <= goal_y_max )){
-        score(L_TEAM);
+        else {
+            switch (ball->getDirection()) {
+                case UPRIGHT:
+                    ball->setDirection(UPLEFT);
+                    break;
+                case DOWNRIGHT:
+                    ball->setDirection(DOWNLEFT);
+                default:
+                    ball->setDirection(LEFT);
+            }
+        }
     }
 
-    // Left wall hit
-    if (ball_x <= left_wall && (ball_y < goal_y_min || ball_y > goal_y_max )) {
-        switch (ball->getDirection()) {
-        case LEFT:
-            ball->setDirection(RIGHT);
-            break;
-        case UPLEFT:
-            ball->setDirection(UPRIGHT);
-            break;
-        case DOWNLEFT:
-            ball->setDirection(DOWNRIGHT);
-            break;
-        default:
-            break;
+    // left wall hit
+    if (ball_x <= left_wall) {
+        if (WITHIN_GOAL(ball_y)) {
+            score(R_TEAM);
         }
-    }
-    // Left goal hit
-    else if (ball_x == 0 && (ball_y >= goal_y_min || ball_y <= goal_y_max )){
-        score(R_TEAM);
+        else {
+            switch (ball->getDirection()) {
+                case UPLEFT:
+                    ball->setDirection(UPRIGHT);
+                    break;
+                case DOWNLEFT:
+                    ball->setDirection(DOWNRIGHT);
+                    break;
+                default:
+                    ball->setDirection(RIGHT);
+            }
+        }
     }
 
     //ball should move if no player is dribbling it
