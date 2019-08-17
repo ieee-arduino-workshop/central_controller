@@ -34,6 +34,8 @@
 #define L_TEAM_Y(c) (height * (c + 2) / (num_players + 2) + OFFSET_X)
 #define R_TEAM_Y(c) (height * (c + 1) / (num_players + 2) + OFFSET_Y)
 
+#define WITHIN_GOAL(y) (ball_y >= goal_y_min || ball_y <= goal_y_max)
+
 #define BALL_SPEED 4
 #define PLAYER_SPEED 2
 
