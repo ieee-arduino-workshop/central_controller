@@ -1,16 +1,15 @@
 #include "Ball.h"
 #include <Arduino.h>
 
-#define BALL_SPEED 5
-
 /**
  * Constructor.
  */
-Ball::Ball(int pos_x, int pos_y) {
+Ball::Ball(int pos_x, int pos_y, int s) {
     x = pos_x;
     y = pos_y;
     ori_x = pos_x;
     ori_y = pos_y;
+    speed = s;
     direction = STOP;
 }
 
@@ -29,32 +28,32 @@ void Ball::reset() {
 void Ball::move() {
     switch (direction) {
         case LEFT:
-            x = x - BALL_SPEED;
+            x -= speed;
             break;
         case RIGHT:
-            x = x + BALL_SPEED;
+            x += speed;
             break;
         case UP:
-            y = y - BALL_SPEED;
+            y -= speed;
             break;
         case DOWN:
-            y = y + BALL_SPEED;
+            y += speed;
             break;
         case UPLEFT:
-            x = x - BALL_SPEED;
-            y = y - BALL_SPEED;
+            x -= speed;
+            y -= speed;
             break;
         case UPRIGHT:
-            x = x + BALL_SPEED;
-            y = y - BALL_SPEED;
+            x += speed;
+            y -= speed;
             break;
-        case DOWNLEFT
-            x = x - BALL_SPEED;
-            y = y + BALL_SPEED;
+        case DOWNLEFT:
+            x -= speed;
+            y += speed;
             break;
         case DOWNRIGHT:
-            x = x + BALL_SPEED;
-            y = y + BALL_SPEED;
+            x += speed;
+            y += speed;
             break;
         default:
             break;

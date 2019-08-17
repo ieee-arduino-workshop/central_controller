@@ -9,9 +9,10 @@ class Ball {
         int x, y;
         int ori_x, ori_y;
         eDir direction;
+        int speed;
 
     public:
-        Ball(int, int);
+        Ball(int, int, int);
         void reset();
         void move();
 
