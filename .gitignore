@@ -2,4 +2,4 @@
 .vscode/
 *.exe
 .pio/
-software_central_controller.code-workspace
+*.code-workspace
