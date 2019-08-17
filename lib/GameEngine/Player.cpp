@@ -4,7 +4,7 @@
 /**
  * Constructor.
  */
-Player::Player(int pos_x, int pos_y, bool t, uint8_t i)
+Player::Player(int pos_x, int pos_y, bool t, uint8_t i, int s)
 {
     dribbling = false;
     stunned = false;
@@ -15,6 +15,7 @@ Player::Player(int pos_x, int pos_y, bool t, uint8_t i)
     x = pos_x;
     y = pos_y;
     id = i;
+    speed = s;
 }
 
 /**
@@ -67,71 +68,71 @@ int Player::getY()
 }
 
 /**
- * Move up SPEED units.
+ * Move up speed units.
  */
 void Player::moveUp()
 {
-    y -= SPEED;
+    y -= speed;
 }
 
 /**
- * Move down SPEED units.
+ * Move down speed units.
  */
 void Player::moveDown()
 {
-    y += SPEED;
+    y += speed;
 }
 
 /**
- * Move left SPEED units.
+ * Move left speed units.
  */
 void Player::moveLeft()
 {
-    x -= SPEED;
+    x -= speed;
 }
 
 /**
- * Move right SPEED units.
+ * Move right speed units.
  */
 void Player::moveRight()
 {
-    x += SPEED;
+    x += speed;
 }
 
 /**
- * Move diagonally up and left SPEED units.
+ * Move diagonally up and left speed units.
  */
 void Player::moveUpLeft()
 {
-    y -= SPEED;
-    x -= SPEED;
+    y -= speed;
+    x -= speed;
 }
 
 /**
- * Move diagnolly up and right SPEED units.
+ * Move diagnolly up and right speed units.
  */
 void Player::moveUpRight()
 {
-    y -= SPEED;
-    x += SPEED;
+    y -= speed;
+    x += speed;
 }
 
 /**
- * Move diagonally down and left SPEED units.
+ * Move diagonally down and left speed units.
  */
 void Player::moveDownLeft()
 {
-    y += SPEED;
-    x -= SPEED;
+    y += speed;
+    x -= speed;
 }
 
 /**
- * Move diagonally down and right SPEED units.
+ * Move diagonally down and right speed units.
  */
 void Player::moveDownRight()
 {
-    y += SPEED;
-    x += SPEED;
+    y += speed;
+    x += speed;
 }
 
 /**

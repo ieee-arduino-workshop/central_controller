@@ -3,9 +3,6 @@
 
 #include "direction.h"
 #include <Arduino.h>
-// #include "GameManager.h"
-
-#define SPEED 5
 
 class Player {
     private:
@@ -31,8 +28,11 @@ class Player {
         // initial co-ordinates
         int original_x, original_y;
 
+        // movement speed
+        int speed;
+
     public:
-        Player(int, int, bool, uint8_t);
+        Player(int, int, bool, uint8_t, int);
 
         void reset();
 
