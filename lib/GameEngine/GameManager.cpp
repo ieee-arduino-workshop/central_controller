@@ -32,32 +32,33 @@ GameManager::GameManager(int w, int h, int np) {
     // Set goal parameters
     goal_y_min = height*(GOAL_WIDTH - 1)/(2*GOAL_WIDTH);
     goal_y_max = height*(GOAL_WIDTH + 1)/(2*GOAL_WIDTH);
-    
-    // temporary counter for player id fpga side
-    uint8_t temp_count_odd = 0x01;
-    uint8_t temp_count_even = 0x06;
-    // load players
-    for (int i = 0; i < num_players ; i++) {
-        // even players on the left side
-        if (i % 2 == 0) {
-            if (temp_count_odd <= 5){
-                players[i] = new Player(L_TEAM_X, L_TEAM_Y(i), L_TEAM, temp_count_odd);
-                temp_count_odd++;
-            }
 
+    // add the players
+    for (int i = 0; i < num_players; i++) {
+        // odd players on the left
+        if (i % 2 != 0) {
+            players[i] = new Player(
+                L_TEAM_X,
+                L_TEAM_Y(i),
+                L_TEAM,
+                i,
+                PLAYER_SPEED
+            );
         }
-
-        // odd players on the right side
+        // event players on the right
         else {
-            if (temp_count_even > 5){
-                players[i] = new Player(R_TEAM_X, R_TEAM_Y(i), R_TEAM, temp_count_even);
-                temp_count_even++;
-            }
+            players[i] = new Player(
+                R_TEAM_X,
+                R_TEAM_Y(i),
+                R_TEAM,
+                i,
+                PLAYER_SPEED
+            );
         }
     }
 
     // set up the ball
-    ball = new Ball((width / 2) + OFFSET_X, (height / 2) + OFFSET_Y);
+    ball = new Ball((width / 2) + OFFSET_X, (height / 2) + OFFSET_Y, BALL_SPEED);
     
 }
 

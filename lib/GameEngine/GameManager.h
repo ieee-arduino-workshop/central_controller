@@ -11,7 +11,7 @@
 #include <Arduino.h>
 #include "Ball.h"
 #include "Player.h"
-#include "packet.h"
+#include "packbet.h"
 #include "direction.h"
 
 /// declare offset of screen based on FPGA configuration
@@ -23,7 +23,6 @@
 #define OFFSET_X 40
 #define OFFSET_Y 60
 
-
 #define MAX_PLAYERS 12
 
 #define L_TEAM 0
@@ -34,6 +33,9 @@
 
 #define L_TEAM_Y(c) (height * (c + 2) / (num_players + 2) + OFFSET_X)
 #define R_TEAM_Y(c) (height * (c + 1) / (num_players + 2) + OFFSET_Y)
+
+#define BALL_SPEED 4
+#define PLAYER_SPEED 2
 
 //change the wideness of the goal here (the smaller the wider)
 //1 = height of the field, 2 = 1/2 height, 3 = 1/3, etc.
