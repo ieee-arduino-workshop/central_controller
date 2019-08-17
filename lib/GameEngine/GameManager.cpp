@@ -41,7 +41,7 @@ GameManager::GameManager(int w, int h, int np) {
                 L_TEAM_X,
                 L_TEAM_Y(i),
                 L_TEAM,
-                i,
+                i + 1,
                 PLAYER_SPEED
             );
         }
@@ -51,7 +51,7 @@ GameManager::GameManager(int w, int h, int np) {
                 R_TEAM_X,
                 R_TEAM_Y(i),
                 R_TEAM,
-                i,
+                i + 1,
                 PLAYER_SPEED
             );
         }
