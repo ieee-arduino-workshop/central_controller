@@ -11,7 +11,7 @@
 #include <Arduino.h>
 #include "Ball.h"
 #include "Player.h"
-#include "packbet.h"
+#include "packet.h"
 #include "direction.h"
 
 /// declare offset of screen based on FPGA configuration
