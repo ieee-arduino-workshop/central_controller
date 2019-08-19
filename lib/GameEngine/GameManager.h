@@ -37,6 +37,7 @@
 #define WITHIN_GOAL(y) (ball_y >= goal_y_min && ball_y <= goal_y_max)
 
 #define BALL_SPEED 8
+#define BALL_SPEED_REDUCTION_RATE 100
 #define PLAYER_SPEED 4
 
 //change the wideness of the goal here (the smaller the wider)

@@ -9,10 +9,14 @@ class Ball {
         int x, y;
         int ori_x, ori_y;
         eDir direction;
-        int speed;
+        int speed_temp;
+        int speed_original;
+        int tick_counter = 0;
+        int speed_reduction_rate;
+        bool momentum;
 
     public:
-        Ball(int, int, int);
+        Ball(int, int, int, int);
         void reset();
         void move();
 
@@ -31,6 +35,10 @@ class Ball {
         eDir getDirection();
         void setDirection(eDir);
         void randomDirection();
+
+        void decreaseSpeed();
+        void setMomentum(bool);
+        int getSpeed();
 };
 
 #endif

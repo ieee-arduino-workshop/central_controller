@@ -58,7 +58,7 @@ GameManager::GameManager(int w, int h, int np) {
     }
 
     // set up the ball
-    ball = new Ball((width / 2) + OFFSET_X, (height / 2) + OFFSET_Y, BALL_SPEED);
+    ball = new Ball((width / 2) + OFFSET_X, (height / 2) + OFFSET_Y, BALL_SPEED, BALL_SPEED_REDUCTION_RATE);
     
 }
 
@@ -480,6 +480,7 @@ void GameManager::logic() {
     }
     //if ball is not being dribble by players then ball can move
     if (!dribbling){
+        ball->setMomentum(true);
         ball->move();
     }
 
@@ -533,6 +534,7 @@ void GameManager::logic() {
     //That player shall keep the ball
     if (same_player && !tackling){
         last_player->setDribbling(true);
+        ball->setMomentum(false);
     //If the same player as last time is near the ball and there is tackling
     //The previous player is stunned, and a tackling player gets the ball
     //Priority given to players later in the players[] array
@@ -541,6 +543,7 @@ void GameManager::logic() {
             last_player->setStun(50);// set stun to true for 10 frames
         }
         tackle_player->setDribbling(true);
+        ball->setMomentum(false);
         last_player = tackle_player;
         last_player_team = tackle_player->getTeam();
     //If the player who was dribbling the ball is no longer dribbling the ball
@@ -550,6 +553,7 @@ void GameManager::logic() {
         last_player = player_close;
         if(player_close != NULL){
             player_close->setDribbling(true);
+            ball->setMomentum(false);
             last_player_team = player_close->getTeam();
         //If there were no players nearby, last_player is NULL
         }else{

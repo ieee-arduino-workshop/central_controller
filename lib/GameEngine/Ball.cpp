@@ -4,13 +4,15 @@
 /**
  * Constructor.
  */
-Ball::Ball(int pos_x, int pos_y, int s) {
+Ball::Ball(int pos_x, int pos_y, int s, int srr) {
     x = pos_x;
     y = pos_y;
     ori_x = pos_x;
     ori_y = pos_y;
-    speed = s;
+    speed_temp = s;
+    speed_original = s;
     direction = STOP;
+    speed_reduction_rate = srr;
 }
 
 /**
@@ -26,37 +28,40 @@ void Ball::reset() {
  * Ball direction change mechanics.
  */
 void Ball::move() {
-    switch (direction) {
-        case LEFT:
-            x -= speed;
-            break;
-        case RIGHT:
-            x += speed;
-            break;
-        case UP:
-            y -= speed;
-            break;
-        case DOWN:
-            y += speed;
-            break;
-        case UPLEFT:
-            x -= speed;
-            y -= speed;
-            break;
-        case UPRIGHT:
-            x += speed;
-            y -= speed;
-            break;
-        case DOWNLEFT:
-            x -= speed;
-            y += speed;
-            break;
-        case DOWNRIGHT:
-            x += speed;
-            y += speed;
-            break;
-        default:
-            break;
+    if(getSpeed()){
+        decreaseSpeed();
+        switch (direction) {
+            case LEFT:
+                x -= speed_temp;
+                break;
+            case RIGHT:
+                x += speed_temp;
+                break;
+            case UP:
+                y -= speed_temp;
+                break;
+            case DOWN:
+                y += speed_temp;
+                break;
+            case UPLEFT:
+                x -= speed_temp;
+                y -= speed_temp;
+                break;
+            case UPRIGHT:
+                x += speed_temp;
+                y -= speed_temp;
+                break;
+            case DOWNLEFT:
+                x -= speed_temp;
+                y += speed_temp;
+                break;
+            case DOWNRIGHT:
+                x += speed_temp;
+                y += speed_temp;
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -144,4 +149,27 @@ void Ball::setDirection(eDir d) {
 void Ball::randomDirection() {
     //random number from 1-9
     direction = (eDir) (random(1,9));
+}
+
+void Ball::decreaseSpeed() {
+    if (momentum == true) {
+        if (tick_counter % speed_reduction_rate) {
+            speed_temp = speed_temp - 1;
+        } else if (!speed_temp) {
+            tick_counter = 0;
+        }
+    } else {
+        speed_temp = speed_original;
+    }
+    tick_counter++;
+    Serial.print("Momentum: ");
+    Serial.println(speed_reduction_rate);
+}
+
+void Ball::setMomentum(bool m){
+    momentum = m;
+}
+
+int Ball::getSpeed() {
+    return speed_temp;
 }
