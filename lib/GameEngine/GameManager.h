@@ -29,10 +29,13 @@
 #define R_TEAM 1
 
 #define L_TEAM_X (width / 4 +  OFFSET_X)
-#define R_TEAM_X (3 * width / 4 + OFFSET_Y)
+#define R_TEAM_X (3 * width / 4 + OFFSET_X)
 
-#define L_TEAM_Y(c) (height * (c + 2) / (num_players + 2) + OFFSET_X)
-#define R_TEAM_Y(c) (height * (c + 1) / (num_players + 2) + OFFSET_Y)
+// #define L_TEAM_Y(c) (height * (c + 2) / (num_players + 2) + OFFSET_Y)
+// #define R_TEAM_Y(c) (height * (c + 1) / (num_players + 2) + OFFSET_Y)
+
+//                          two teams so /2      players start at 0
+#define TEAM_Y(c) ((height/((num_players/2)+1)) * (c+1) + OFFSET_Y)
 
 #define WITHIN_GOAL(y) (ball_y >= goal_y_min && ball_y <= goal_y_max)
 

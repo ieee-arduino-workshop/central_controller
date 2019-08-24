@@ -43,7 +43,7 @@ GameManager::GameManager(int w, int h, int np)
         {
             players[i] = new Player(
                 L_TEAM_X,
-                L_TEAM_Y(i),
+                TEAM_Y(i/2), //Rounds down
                 L_TEAM,
                 i + 1,
                 PLAYER_SPEED);
@@ -53,7 +53,7 @@ GameManager::GameManager(int w, int h, int np)
         {
             players[i] = new Player(
                 R_TEAM_X,
-                R_TEAM_Y(i),
+                TEAM_Y(i/2), //Rounds down
                 R_TEAM,
                 i + 1,
                 PLAYER_SPEED);
