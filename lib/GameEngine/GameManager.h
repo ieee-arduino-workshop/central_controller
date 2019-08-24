@@ -36,15 +36,17 @@
 
 #define WITHIN_GOAL(y) (ball_y >= goal_y_min && ball_y <= goal_y_max)
 
-#define BALL_SPEED 8
+#define BALL_SPEED 10
 #define BALL_SPEED_REDUCTION_RATE 5 //  5% - the higher value, the faster the ball stop. 
-#define PLAYER_SPEED 4
+#define PLAYER_SPEED 6
 
 //change the wideness of the goal here (the smaller the wider)
 //1 = height of the field, 2 = 1/2 height, 3 = 1/3, etc.
 #define GOAL_WIDTH 4
 
 #define DISTANCE_BETWEEN_BALL_AND_PLAYER 8
+
+#define STUN_TIME 50
 
 class GameManager
 {

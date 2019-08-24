@@ -632,7 +632,7 @@ void GameManager::logic()
     {
         if (last_player != NULL)
         {
-            last_player->setStun(50); // set stun to true for 10 frames
+            last_player->setStun(STUN_TIME); // set stun to true for 10 frames
         }
         tackle_player->setDribbling(true);
         ball->setMomentum(false);
