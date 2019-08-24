@@ -479,10 +479,43 @@ void GameManager::input(packet *p)
  */
 void GameManager::score(bool team) //update score of a particular player
 {
+    send_packet send_goal_notification;
+
     if (team == L_TEAM) //if address of player belong to player 1
+    {
         score_left++;
+    }
     else if (team == R_TEAM) //else if address of player belong to player 2
+    {
         score_right++;
+    }
+
+    send_goal_notification.id = 0xFB; //id of the ball
+    send_goal_notification.x = 0x00;
+    send_goal_notification.y = 0x00;
+
+    Serial1.write(send_goal_notification.id);
+    Serial.print(send_goal_notification.id, HEX);
+    Serial.print(" ");
+
+    Serial1.write(send_goal_notification.x >> 8 & 0xFF);
+    delayMicroseconds(100);
+    Serial1.write(send_goal_notification.x & 0xFF);
+    delayMicroseconds(100);
+    Serial.print(send_goal_notification.x, HEX);
+    Serial.print(" ");
+
+    Serial1.write(send_goal_notification.y >> 8 & 0xFF);
+    delayMicroseconds(100);
+    Serial1.write(send_goal_notification.y & 0xFF);
+    delayMicroseconds(100);
+    Serial.print(send_goal_notification.y, HEX);
+
+    Serial.print(" ");
+    Serial.print(" ");
+    Serial.println();
+
+    delay(1000);
 
     reset();
 }
@@ -575,6 +608,7 @@ void GameManager::logic()
                         break;
                     case DOWNRIGHT:
                         ball->setDirection(DOWNLEFT);
+                        break;
                     default:
                         ball->setDirection(LEFT);
                 }
