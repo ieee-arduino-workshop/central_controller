@@ -44,6 +44,8 @@
 //1 = height of the field, 2 = 1/2 height, 3 = 1/3, etc.
 #define GOAL_WIDTH 4
 
+#define DISTANCE_BETWEEN_BALL_AND_PLAYER 8
+
 class GameManager
 {
 private:

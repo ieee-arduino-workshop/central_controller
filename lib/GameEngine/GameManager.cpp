@@ -597,7 +597,7 @@ void GameManager::logic()
         {
             //Checks which players are close enough to contest the ball
             int distance_between_player_and_ball = sqrt(pow((ball_x - player_x[i]), 2) + pow((ball_y - player_y[i]), 2));
-            if (distance_between_player_and_ball <= 1)
+            if (distance_between_player_and_ball <= DISTANCE_BETWEEN_BALL_AND_PLAYER)
             {
                 //Stores a player who could get the ball
                 //Often overwritten
