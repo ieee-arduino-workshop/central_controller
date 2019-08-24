@@ -80,6 +80,8 @@ public:
     void logic();
     void run();
     void send();
+
+    void getScore();
 };
 
 #endif

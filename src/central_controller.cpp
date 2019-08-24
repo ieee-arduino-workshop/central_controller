@@ -154,6 +154,7 @@ void loop()
     soccer_game.logic();
     // soccer_game.draw();
     soccer_game.send();
+    soccer_game.getScore();
     // Serial.println(micros()-previous);
     // previous=micros();
     

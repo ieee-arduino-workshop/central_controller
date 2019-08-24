@@ -32,8 +32,10 @@ GameManager::GameManager(int w, int h, int np)
     dribbling_bottom_wall = height + OFFSET_Y - 2;
 
     // Set goal parameters
-    goal_y_min = height * (GOAL_WIDTH - 1) / (2 * GOAL_WIDTH) + OFFSET_Y;
-    goal_y_max = height * (GOAL_WIDTH + 1) / (2 * GOAL_WIDTH) + OFFSET_Y;
+    goal_y_min = height/5*2 + OFFSET_Y;
+    goal_y_max = height/5*3 + OFFSET_Y;
+    // height * (GOAL_WIDTH - 1) / (2 * GOAL_WIDTH) + OFFSET_Y;
+    // height * (GOAL_WIDTH + 1) / (2 * GOAL_WIDTH) + OFFSET_Y;
 
     // add the players
     for (int i = 0; i < num_players; i++)
@@ -892,5 +894,15 @@ void GameManager::send()
 
     Serial.print(" ");
     Serial.print(" ");
+    Serial.println();
+}
+
+void GameManager::getScore() {
+    Serial.println();
+    Serial.println("Scores");
+    Serial.print("Left Team:  ");
+    Serial.println(score_left);
+    Serial.print("Right Team: ");
+    Serial.println(score_right);
     Serial.println();
 }
