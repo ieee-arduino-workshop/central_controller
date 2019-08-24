@@ -511,13 +511,51 @@ void GameManager::logic()
     // Bottom wall hit. TODO: ADD REFLECTED BOUNCE FOR STRAIGHT DIRECTION
     if (ball_y >= bottom_wall)
     {
-        ball->reset();
+        if (BOUNCE_MODE)
+        { 
+            switch (ball->getDirection()) {
+                case DOWN:
+                    ball->setDirection(UP);
+                    break;
+                case DOWNRIGHT:
+                    ball->setDirection(UPRIGHT);
+                    break;
+                case DOWNLEFT:
+                    ball->setDirection(UPLEFT);
+                    break;
+                default:
+                    break;
+            }
+        }
+        else 
+        {
+            ball->reset();
+        }
     }
 
     // Top wall hit
     if (ball_y <= top_wall)
     {
-        ball->reset();
+        if (BOUNCE_MODE)
+        {
+            switch (ball->getDirection()) {
+            case UP:
+                ball->setDirection(DOWN);
+                break;
+            case UPRIGHT:
+                ball->setDirection(DOWNRIGHT);
+                break;
+            case UPLEFT:
+                ball->setDirection(DOWNLEFT);
+                break;
+            default:
+                break;
+            }
+        }
+        else
+        {
+            ball->reset();
+        }
     }
 
     // Right wall hit
@@ -529,7 +567,22 @@ void GameManager::logic()
         }
         else
         {
-            ball->reset();
+            if (BOUNCE_MODE)
+            {
+                switch (ball->getDirection()) {
+                    case UPRIGHT:
+                        ball->setDirection(UPLEFT);
+                        break;
+                    case DOWNRIGHT:
+                        ball->setDirection(DOWNLEFT);
+                    default:
+                        ball->setDirection(LEFT);
+                }
+            }
+            else
+            {
+                ball->reset();
+            }
         }
     }
 
@@ -542,7 +595,23 @@ void GameManager::logic()
         }
         else
         {
-            ball->reset();
+            if (BOUNCE_MODE) 
+            {
+                switch (ball->getDirection()) {
+                    case UPLEFT:
+                        ball->setDirection(UPRIGHT);
+                        break;
+                    case DOWNLEFT:
+                        ball->setDirection(DOWNRIGHT);
+                        break;
+                    default:
+                        ball->setDirection(RIGHT);
+                }
+            }
+            else
+            {
+                ball->reset();
+            }
         }
     }
 

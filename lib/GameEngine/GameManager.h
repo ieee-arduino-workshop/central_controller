@@ -48,6 +48,8 @@
 
 #define STUN_TIME 50
 
+#define BOUNCE_MODE 1
+
 class GameManager
 {
 private:
